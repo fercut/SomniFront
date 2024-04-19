@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import React, { useState } from 'react';
 import NavBar from './components/NavBar';
 import Rings from './Screens/Rings';
@@ -45,29 +46,32 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <NavBar />
-      <div className="content">
-        <Routes>
-          <Route path="home" element={<Home />} />
-          <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="rings" element={<Rings />} />
-          <Route path="earrings" element={<Earrings />} />
-          <Route path="chokers" element={<Chokers />} />
-          <Route path="bracelets" element={<Bracelets />} />
-          <Route path="chains" element={<Chains />} />
-          <Route path="pendants" element={<Pendants />} />
-          <Route path="shoppingCart" element={<ShoppingCart />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="signin" element={<Signin />} />
-          <Route
-            path="login"
-            element={token && !tokenExpired ? <Navigate to="/user" /> : <Login onLogin={handleLogin} />}
-          />
-          <Route path="user" element={<User />} />
-        </Routes>
-      </div>
-    </Router>
+    <>
+      <SpeedInsights />
+      <Router>
+        <NavBar />
+        <div className="content">
+          <Routes>
+            <Route path="home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="rings" element={<Rings />} />
+            <Route path="earrings" element={<Earrings />} />
+            <Route path="chokers" element={<Chokers />} />
+            <Route path="bracelets" element={<Bracelets />} />
+            <Route path="chains" element={<Chains />} />
+            <Route path="pendants" element={<Pendants />} />
+            <Route path="shoppingCart" element={<ShoppingCart />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="signin" element={<Signin />} />
+            <Route
+              path="login"
+              element={token && !tokenExpired ? <Navigate to="/user" /> : <Login onLogin={handleLogin} />}
+            />
+            <Route path="user" element={<User />} />
+          </Routes>
+        </div>
+      </Router>
+    </>
   );
 };
 
