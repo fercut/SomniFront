@@ -101,8 +101,10 @@ const ArticleCard = ({ article, onBuyClick }) => {
         src={`data:image/jpeg;base64,${article.image}`}
         alt={article.type}
         className="article-image"
-        width={'200px'}
-        onClick = {() => !isModalOpen && handleImageClick()}
+        width={'80%'}
+        height={'50%'}
+        id='foto'
+        onClick={() => !isModalOpen && handleImageClick()}
       />
       <div className="details">
         <p><b>Material:</b> {capitalizeFirstLetter(article.material)}</p>
@@ -111,7 +113,9 @@ const ArticleCard = ({ article, onBuyClick }) => {
         <p><b>Detalles:</b> {capitalizeFirstLetter(article.details)}</p>
         <p><b>Precio:</b> {article.price}€</p>
       </div>
-      <button onClick={handleBuyClick}>Comprar</button>
+      <div className="button-container">
+        <button onClick={handleBuyClick} id='Comprar'>Comprar</button>
+      </div>
       {isModalOpen && (<ImageArticle
         type={article.type}
         imageUrl={`data:image/jpeg;base64,${article.image}`}
