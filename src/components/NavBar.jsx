@@ -1,39 +1,50 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../style/NavBar.css';
+import ring from '../assets/ring.png';
+import bracelets from '../assets/bracelets.png';
+import chokers from '../assets/chokers.png';
+import earrings from '../assets/earrings.png';
+import chains from '../assets/chains.png';
+import pendants from '../assets/pendants.png';
+import homeIcon from '../assets/home.png';
+import loginIcon from '../assets/login.png';
+import carritoIcon from '../assets/carrito.png';
+import contactoIcon from '../assets/contacto.png';
 
 const links = [
   {
     name: "Anillos",
     href: "/rings",
-    icon: "../../imagenes/iconos/ring.png",
+    icon: ring,
   },
   {
     name: "Pulseras",
     href: "/bracelets",
-    icon: "../../imagenes/iconos/bracelets.png",
+    icon: bracelets,
   },
   {
     name: "Gargantillas",
     href: "/chokers",
-    icon: "../../imagenes/iconos/chokers.png",
+    icon: chokers,
   },
   {
     name: "Pendientes",
     href: "/earrings",
-    icon: "../../imagenes/iconos/earrings.png",
+    icon: earrings,
   },
   {
     name: "Cadenas",
     href: "/chains",
-    icon: "../../imagenes/iconos/chains.png",
+    icon: chains,
   },
   {
     name: "Colgantes",
     href: "/pendants",
-    icon: "../../imagenes/iconos/pendants.png",
+    icon: pendants,
   },
 ];
+
 const home = [{
   name: "Home",
   href: "/home"
@@ -43,17 +54,17 @@ const shop = [
   {
     name: "",
     href: "/login",
-    icon: "../../imagenes/iconos/login.png"
+    icon: loginIcon
   },
   {
     name: "",
     href: "/shoppingCart",
-    icon: "../../imagenes/iconos/carrito.png"
+    icon: carritoIcon
   },
   {
     name: "",
     href: "/contact",
-    icon: "../../imagenes/iconos/contacto.png"
+    icon: contactoIcon
   },
 ]
 
@@ -63,7 +74,7 @@ const NavBar = () => {
         <div className='home'>
           {home.map((link, index) => (
             <Link key={index} to={link.href}>
-              <img src="../../imagenes/iconos/home.png" alt="home" width={'100px'} />
+              <img src= {homeIcon} alt="home" width={'100px'} />
             </Link>
           ))}
         </div>

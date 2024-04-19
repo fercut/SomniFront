@@ -2,7 +2,7 @@ body {
   font-family: 'Kanit', sans-serif;
   margin: 0;
   padding: 0;
-  background: url('../imagenes/bg3.png') fixed; 
+  background: url('../assets/bg3.png') fixed; 
   background-size: cover; 
   background-repeat: no-repeat; 
 }
