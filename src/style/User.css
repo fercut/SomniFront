@@ -1,0 +1,49 @@
+.user h1 {
+    margin: 20px;
+    text-align: center;
+}
+
+.user button {
+    margin: 0 auto;
+    display: block;
+}
+
+.data {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+
+.usuario {
+    width: auto;
+}
+
+.usuario>p {
+    padding-left: 10px;
+}
+
+.usuario>button {
+    margin: 0 auto;
+    display: block;
+}
+
+.pedidos {
+    width: 17%;
+}
+
+.pedidos ul {
+    padding: 0;
+}
+
+.pedidos li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: rgb(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.pedidos button {
+    margin-left: 20px;
+}

@@ -1,0 +1,35 @@
+.alert {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.2); 
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  width: 50%;
+  max-width: 400px;
+  color: white;
+}
+
+.alert>h1 {
+  font-size: 24px; 
+  margin-top: 5%;
+  margin-bottom: 10px; 
+}
+
+.alert p {
+  font-size: 16px;
+  margin-bottom: 20px; 
+}
+
+.alert button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+}

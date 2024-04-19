@@ -1,0 +1,63 @@
+.image-article-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90%;
+  box-sizing: border-box;
+  overflow: auto;
+  color: white;
+}
+
+.image-container {
+  display: flex;
+  height: 100%;
+}
+
+.image-container img {
+  max-width: 50%;
+  max-height: 80%;
+  object-fit: cover;
+  border-radius: 10px;
+  margin: 30px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.shop-button {
+  border: 2px solid white;
+  align-self: center;
+  color: white;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5%;
+}
+.content h1 {
+  font-size: 40px;
+  margin-top: 20%;
+  margin-bottom: 15%;
+}
+.content>p b {
+  font-size: 20px;
+}
+.content>p {
+  margin-bottom: 20%;
+}
