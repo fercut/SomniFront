@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import React, { useState } from 'react';
 import NavBar from './components/NavBar';
 import Rings from './Screens/Rings';
@@ -47,7 +46,6 @@ const App = () => {
 
   return (
     <>
-      <SpeedInsights />
       <Router>
         <NavBar />
         <div className="content">
