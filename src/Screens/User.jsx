@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../style/User.css'
+import '../style/User.css';
+import EditUserModal from '../components/UpdateUser';
 
 const User = () => {
     const token = sessionStorage.getItem('token');
     const userId = sessionStorage.getItem('userId');
     const [orders, setOrders] = useState([]);
+    const [showEditModal, setShowEditModal] = useState(false);
     const [userData, setUserData] = useState({
         name: '',
         lastname: '',
@@ -17,6 +19,47 @@ const User = () => {
         postalCode: '',
         quantity: '',
     });
+    const handleEditClick = () => {
+        setShowEditModal(true);
+    };
+    const handleSaveChanges = async (editedData) => {
+        try {
+            const response = await fetch(`http://localhost:3000/users/${userId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(editedData),
+            });
+
+            if (response.ok) {
+                onSave(editedData);
+                onClose();
+            } else {
+                const response = await fetch(`https://somniapi.onrender.com/${userId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                    },
+                    body: JSON.stringify(editedData),
+                });
+
+                if (response.ok) {
+                    onSave(editedData);
+                    onClose();
+                } else {
+                    console.error('Error al actualizar los datos del usuario:', response.statusText);
+                }
+            }
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+        }
+    };
+    const handleCloseModal = () => {
+        setShowEditModal(false);
+    };
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -123,7 +166,14 @@ const User = () => {
                     <p><b>Localidad:</b> {userData.location}</p>
                     <p><b>Ciudad:</b> {userData.city}</p>
                     <p><b>Codigo postal:</b> {userData.postalCode}</p>
-                    <button>Modificar</button>
+                    <button id='Modificar' onClick={handleEditClick}>Modificar</button>
+                    {showEditModal && (
+                        <EditUserModal
+                            userData={userData}
+                            onSave={handleSaveChanges}
+                            onClose={handleCloseModal}
+                        />
+                    )}
                 </div>
                 <div className='pedidos'>
                     <h3>Historial de pedidos</h3>
@@ -135,7 +185,7 @@ const User = () => {
                                         <p><b>Fecha:</b> {new Date(order.date).toLocaleDateString()}</p>
                                         <p><b>Precio del pedido:</b> {order.price}€</p>
                                     </div>
-                                    <button>Ver</button>
+                                    <button id={`Ver pedido ${order._id}`}>Ver</button>
                                 </li>
                             ))}
                         </ul>
