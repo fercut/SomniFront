@@ -91,6 +91,7 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
 
 
   return (
+    <div className='modal'>
     <div className="image-article-modal">
       {alert.showAlert && (
         <Alert
@@ -110,8 +111,9 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
           <p><b>Precio:</b> {price}€</p>
           <button className='shop-button' onClick={handleBuyClick} >Comprar</button>
         </div>
-        <button className="close-button" onClick={onClose}>X</button>
+        <button className="close-button" onClick={onClose}>&times;</button>
       </div>
+    </div>
     </div>
   );
 };

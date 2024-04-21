@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../style/User.css';
-import EditUserModal from '../components/UpdateUser';
+import UpdateUser from '../components/UpdateUser';
 
 const User = () => {
     const token = sessionStorage.getItem('token');
@@ -168,7 +168,7 @@ const User = () => {
                     <p><b>Codigo postal:</b> {userData.postalCode}</p>
                     <button id='Modificar' onClick={handleEditClick}>Modificar</button>
                     {showEditModal && (
-                        <EditUserModal
+                        <UpdateUser
                             userData={userData}
                             onSave={handleSaveChanges}
                             onClose={handleCloseModal}
@@ -183,6 +183,7 @@ const User = () => {
                                 <li key={order._id}>
                                     <div>
                                         <p><b>Fecha:</b> {new Date(order.date).toLocaleDateString()}</p>
+                                        <p><b>Número de pedido: </b> ***{order._id.substring(order._id.length - 4)}</p>
                                         <p><b>Precio del pedido:</b> {order.price}€</p>
                                     </div>
                                     <button id={`Ver pedido ${order._id}`}>Ver</button>

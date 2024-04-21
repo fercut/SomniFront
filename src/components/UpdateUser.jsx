@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../style/UpdateUser.css';
 
-const EditUserModal = ({ userData, onSave, onClose }) => {
+const UpdateUser = ({ userData, onSave, onClose }) => {
   const [editedData, setEditedData] = useState(userData);
 
   const handleInputChange = (event) => {
@@ -58,4 +58,4 @@ const EditUserModal = ({ userData, onSave, onClose }) => {
   );
 };
 
-export default EditUserModal;
+export default UpdateUser;
