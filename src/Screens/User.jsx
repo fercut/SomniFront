@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../style/User.css';
 import UpdateUser from '../components/UpdateUser';
+import OrderDetail from '../components/OrderDetail';
 
 const User = () => {
     const token = sessionStorage.getItem('token');
     const userId = sessionStorage.getItem('userId');
     const [orders, setOrders] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showOrderDetail, setShowOrderDetail] = useState(false); 
+    const [selectedOrder, setSelectedOrder] = useState(null); 
     const [userData, setUserData] = useState({
         name: '',
         lastname: '',
@@ -59,6 +62,15 @@ const User = () => {
     };
     const handleCloseModal = () => {
         setShowEditModal(false);
+    };
+
+    const handleOrderDetailClick = (order) => {
+        setSelectedOrder(order);
+        setShowOrderDetail(true);
+    };
+
+    const handleCloseOrderDetail = () => {
+        setShowOrderDetail(false);
     };
 
     useEffect(() => {
@@ -186,7 +198,7 @@ const User = () => {
                                         <p><b>Número de pedido: </b> ***{order._id.substring(order._id.length - 4)}</p>
                                         <p><b>Precio del pedido:</b> {order.price}€</p>
                                     </div>
-                                    <button id={`Ver pedido ${order._id}`}>Ver</button>
+                                    <button id={`Ver pedido ${order._id}`} onClick={() => handleOrderDetailClick(order)}>Ver</button>
                                 </li>
                             ))}
                         </ul>
@@ -196,6 +208,9 @@ const User = () => {
                 </div>
             </div>
             <button onClick={handleLogout}>Cerrar sesión</button>
+            {showOrderDetail && (
+                <OrderDetail order={selectedOrder} onClose={handleCloseOrderDetail} />
+            )}
         </div>
     );
 };

@@ -56,3 +56,21 @@
     color: white;
     border-color: white;
   }
+  
+  .article-image img {
+    border-radius: 20px;
+  }
+
+  .article-card {
+    margin-bottom: 20px; /* Espacio entre cada artículo */
+    overflow: auto; /* Limpiar el flujo de contenido */
+}
+
+.article-image {
+    float: left; /* Colocar la imagen a la izquierda */
+    margin-right: 20px; /* Espacio entre la imagen y los detalles */
+}
+
+.article-details {
+    display: block; /* Mostrar los detalles como bloques */
+}

@@ -45,11 +45,9 @@ const ShoppingCart = () => {
 
 
   useEffect(() => {
-    // Obtener el carrito del usuario desde el backend
     const fetchCart = async () => {
 
       if (!token) {
-        // Redirigir a la página de inicio de sesión si no hay un token
         navigate('/login');
         return;
       }
@@ -60,9 +58,8 @@ const ShoppingCart = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+        const data = await responseLocal.json();
           if (responseLocal.ok && data) {
-            const data = await responseLocal.json();
             setUserData({
               name: data.name,
               lastname: data.lastname,
@@ -88,8 +85,9 @@ const ShoppingCart = () => {
               },
             });
 
+            const data = await responseRender.json();
+
               if (responseRender.ok && data) {
-                const data = await responseRender.json();
                 setUserData({
                   name: data.name,
                   lastname: data.lastname,
