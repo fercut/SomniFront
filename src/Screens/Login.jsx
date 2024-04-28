@@ -29,28 +29,46 @@ const Login = ({ onLogin }) => {
       });
       return;
     }
-  
+
     try {
-      const responseRender = await fetch('https://somniapi.onrender.com/users/login', {
+      const responseLocal = await fetch('http://localhost:3000/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
-  
-      if (responseRender.ok) {
-        const data = await responseRender.json();
+
+      if (responseLocal.ok) {
+        const data = await responseLocal.json();
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userId);
         setLoggedIn(true);
         onLogin(data.token);
+
       } else {
-        setAlert({
-          title: 'Error',
-          content: 'Correo electrónico o contraseña incorrecta',
-          showAlert: true,
+        const responseRender = await fetch('https://somniapi.onrender.com/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
         });
+
+        if (responseRender.ok) {
+          const data = await responseRender.json();
+          sessionStorage.setItem('token', data.token);
+          sessionStorage.setItem('userId', data.userId);
+          setLoggedIn(true);
+          onLogin(data.token);
+        } else {
+          setAlert({
+            title: 'Error',
+            content: 'Correo electronico o contraseña incorrecta',
+            showAlert: true,
+          });
+          return;
+        }
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);

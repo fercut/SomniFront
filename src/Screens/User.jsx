@@ -9,8 +9,8 @@ const User = () => {
     const userId = sessionStorage.getItem('userId');
     const [orders, setOrders] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [showOrderDetail, setShowOrderDetail] = useState(false); 
-    const [selectedOrder, setSelectedOrder] = useState(null); 
+    const [showOrderDetail, setShowOrderDetail] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
     const [userData, setUserData] = useState({
         name: '',
         lastname: '',
@@ -27,7 +27,7 @@ const User = () => {
     };
     const handleSaveChanges = async (editedData) => {
         try {
-            const response = await fetch(`http://localhost:3000/users/${userId}`, {
+            const response = await fetch(`https://somniapi.onrender.com/${userId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,22 +40,9 @@ const User = () => {
                 onSave(editedData);
                 onClose();
             } else {
-                const response = await fetch(`https://somniapi.onrender.com/${userId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-                    },
-                    body: JSON.stringify(editedData),
-                });
-
-                if (response.ok) {
-                    onSave(editedData);
-                    onClose();
-                } else {
-                    console.error('Error al actualizar los datos del usuario:', response.statusText);
-                }
+                console.error('Error al actualizar los datos del usuario:', response.statusText);
             }
+
         } catch (error) {
             console.error('Error en la solicitud:', error);
         }

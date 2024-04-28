@@ -17,33 +17,19 @@ const Signin = ({ onRegistro }) => {
 
   const onSubmit = async (data) => {
     try {
-      const responseLocal = await fetch('http://localhost:3000/users', {
+      const responseRender = await fetch('https://somniapi.onrender.com/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
-
-      if (responseLocal.ok) {
+      if (responseRender.ok) {
         setMessage('Usuario registrado con éxito');
         setRegistroExitoso(true);
         reset();
       } else {
-        const responseRender = await fetch('https://somniapi.onrender.com/users', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        if (responseRender.ok) {
-          setMessage('Usuario registrado con éxito');
-          setRegistroExitoso(true);
-          reset();
-        } else {
-          setMessage('Error al registrar el usuario');
-        }
+        setMessage('Error al registrar el usuario');
       }
     } catch (error) {
       setMessage('Error en la solicitud:', error);
