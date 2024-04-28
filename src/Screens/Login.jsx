@@ -31,7 +31,7 @@ const Login = ({ onLogin }) => {
     }
   
     try {
-      const responseLocal = await fetch('http://localhost:3000/users/login', {
+      const responseRender = await fetch('https://somniapi.onrender.com/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,42 +39,21 @@ const Login = ({ onLogin }) => {
         body: JSON.stringify({ email, password }),
       });
   
-      if (responseLocal.ok) {
-        const data = await responseLocal.json();
+      if (responseRender.ok) {
+        const data = await responseRender.json();
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userId);
         setLoggedIn(true);
         onLogin(data.token);
       } else {
-        throw new Error('Error en la solicitud');
+        setAlert({
+          title: 'Error',
+          content: 'Correo electrónico o contraseña incorrecta',
+          showAlert: true,
+        });
       }
     } catch (error) {
-      console.error('Error en la primera solicitud:', error);
-      try {
-        const responseRender = await fetch('https://somniapi.onrender.com/users/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
-  
-        if (responseRender.ok) {
-          const data = await responseRender.json();
-          sessionStorage.setItem('token', data.token);
-          sessionStorage.setItem('userId', data.userId);
-          setLoggedIn(true);
-          onLogin(data.token);
-        } else {
-          setAlert({
-            title: 'Error',
-            content: 'Correo electronico o contraseña incorrecta',
-            showAlert: true,
-          });
-        }
-      } catch (error) {
-        console.error('Error en la segunda solicitud:', error);
-      }
+      console.error('Error en la solicitud:', error);
     }
   };
 
