@@ -42,7 +42,6 @@ const User = () => {
             } else {
                 console.error('Error al actualizar los datos del usuario:', response.statusText);
             }
-
         } catch (error) {
             console.error('Error en la solicitud:', error);
         }
@@ -68,14 +67,14 @@ const User = () => {
             }
 
             try {
-                const responseLocal = await fetch('http://localhost:3000/users/me', {
+                const responseRender = await fetch('https://somniapi.onrender.com/users/me', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
 
-                if (responseLocal.ok) {
-                    const data = await responseLocal.json();
+                if (responseRender.ok) {
+                    const data = await responseRender.json();
                     setUserData({
                         name: data.name,
                         lastname: data.lastname,
@@ -88,28 +87,7 @@ const User = () => {
                         quantity: data.cart.quantity,
                     });
                 } else {
-                    const responseRender = await fetch('https://somniapi.onrender.com/users/me', {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-
-                    if (responseRender.ok) {
-                        const data = await responseRender.json();
-                        setUserData({
-                            name: data.name,
-                            lastname: data.lastname,
-                            email: data.email,
-                            phone: data.phone,
-                            adress: data.adress,
-                            location: data.location,
-                            city: data.city,
-                            postalCode: data.postalCode,
-                            quantity: data.cart.quantity,
-                        });
-                    } else {
-                        console.error('Error al obtener los datos del usuario:', data.message);
-                    }
+                    console.error('Error al obtener los datos del usuario:', data.message);
                 }
             } catch (error) {
                 console.error('Error en la solicitud:', error);
@@ -120,7 +98,7 @@ const User = () => {
             const userId = sessionStorage.getItem('userId');
 
             try {
-                const response = await fetch(`http://localhost:3000/orders/order/${userId}`, {
+                const response = await fetch(`https://somniapi.onrender.com/orders/order/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
