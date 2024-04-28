@@ -180,7 +180,6 @@ const ShoppingCart = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Actualizar el estado con los artículos del carrito después de disminuir la cantidad
         setCartItems((prevCart) =>
           prevCart.map((item) =>
             item.itemId === itemId
@@ -189,7 +188,6 @@ const ShoppingCart = () => {
           )
         );
       } else {
-        // Manejar el caso de error al disminuir la cantidad
         console.error('Error al disminuir la cantidad:', data.message);
       }
     } catch (error) {
@@ -211,10 +209,8 @@ const ShoppingCart = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Actualizar el estado con los artículos del carrito después de eliminar un artículo
         setCartItems((prevCart) => prevCart.filter((item) => item.itemId !== itemId));
       } else {
-        // Manejar el caso de error al eliminar el artículo
         console.error('Error al eliminar el artículo:', data.message);
       }
     } catch (error) {
@@ -224,10 +220,8 @@ const ShoppingCart = () => {
 
   const handleOptionChange = (option) => {
     if (selectedOption === option) {
-      // Si ya está seleccionado, deseleccionar
       setSelectedOption(null);
     } else {
-      // Si no está seleccionado, seleccionar
       setSelectedOption(option);
     }
   };
@@ -260,23 +254,17 @@ const ShoppingCart = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Limpiar el carrito después de realizar con éxito la orden
         handleDelete(cartItems.map(item => item.itemId));
-
-        // Mostrar la alerta de pedido realizado con éxito
         setAlert({
           title: 'Pedido realizado',
           content: '¡Gracias por tu compra!',
           showAlert: true,
         });
-
-        // Puedes redirigir al usuario a otra página si es necesario
         setTimeout(() => {
           navigate('/home');
         }, 3000);
 
       } else {
-        // Mostrar la alerta de error al realizar el pedido
         setAlert({
           title: 'Error',
           content: 'Error al realizar el pedido. Por favor, inténtalo de nuevo.',
@@ -286,7 +274,6 @@ const ShoppingCart = () => {
         console.error('Error al crear la orden:', data.message);
       }
     } catch (error) {
-      // Mostrar la alerta de error en la solicitud
       setAlert({
         title: 'Error',
         content: 'Error al realizar el pedido. Por favor, inténtalo de nuevo.',

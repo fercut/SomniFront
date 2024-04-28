@@ -29,7 +29,7 @@ const Login = ({ onLogin }) => {
       });
       return;
     }
-
+  
     try {
       const responseLocal = await fetch('http://localhost:3000/users/login', {
         method: 'POST',
@@ -38,15 +38,19 @@ const Login = ({ onLogin }) => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+  
       if (responseLocal.ok) {
         const data = await responseLocal.json();
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userId);
         setLoggedIn(true);
         onLogin(data.token);
-
       } else {
+        throw new Error('Error en la solicitud');
+      }
+    } catch (error) {
+      console.error('Error en la primera solicitud:', error);
+      try {
         const responseRender = await fetch('https://somniapi.onrender.com/users/login', {
           method: 'POST',
           headers: {
@@ -54,7 +58,7 @@ const Login = ({ onLogin }) => {
           },
           body: JSON.stringify({ email, password }),
         });
-
+  
         if (responseRender.ok) {
           const data = await responseRender.json();
           sessionStorage.setItem('token', data.token);
@@ -67,11 +71,10 @@ const Login = ({ onLogin }) => {
             content: 'Correo electronico o contraseña incorrecta',
             showAlert: true,
           });
-          return;
         }
+      } catch (error) {
+        console.error('Error en la segunda solicitud:', error);
       }
-    } catch (error) {
-      console.error('Error en la solicitud:', error);
     }
   };
 
