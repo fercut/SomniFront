@@ -27,31 +27,25 @@ const Home = () => {
           .catch((error) => console.error('Error al obtener los artículos desde la segunda URL'));
       });
   }, []);
-
+  
   const handleSearch = (searchTerm) => {
     setIsSearchEmpty(searchTerm === '');
-
+  
     if (searchTerm === '') {
       setSearchResults([]);
     } else {
-      // Realiza la búsqueda solo si la barra de búsqueda no está vacía
-      fetch(`http://localhost:3000/articles/search/${searchTerm}`)
+      fetch(`https://somniapi.onrender.com/articles/search/${searchTerm}`)
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Error al realizar la búsqueda en localhost:3000');
+            throw new Error('Error al realizar la búsqueda en somniapi.onrender.com');
           }
           return response.json();
         })
         .then((data) => {
-          setSearchResults(data); // Establecer los resultados de la búsqueda
+          setSearchResults(data);
         })
         .catch((error) => {
-          console.error(error.message); // Registrar el error en la consola
-          console.log('Intentando la búsqueda en somniapi.onrender.com');
-          fetch(`https://somniapi.onrender.com/articles/search/${searchTerm}`)
-            .then((response) => response.json())
-            .then((data) => setSearchResults(data))
-            .catch((error) => console.error('Error al realizar la búsqueda en somniapi.onrender.com:', error));
+          console.error('Error al realizar la búsqueda en somniapi.onrender.com:', error);
         });
     }
   };
