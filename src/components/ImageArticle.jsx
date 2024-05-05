@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import Alert from './Alert';
 import '../style/ImageArticle.css';
 import { http } from '../config';
@@ -37,8 +38,7 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
       const userId = sessionStorage.getItem('userId');
 
       if (!userId) {
-        console.error('UserId no encontrado en sessionStorage');
-        return;
+        return <Navigate to="/login" />;
       }
 
       if (!id) {
