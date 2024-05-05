@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import Alert from '../components/Alert';
+import { http } from '../config';
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
@@ -31,7 +32,7 @@ const Login = ({ onLogin }) => {
     }
 
     try {
-      const responseRender = await fetch(`${process.env.CONECTION}/users/login`, {
+      const responseRender = await fetch(`${http}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
