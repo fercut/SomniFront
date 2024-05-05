@@ -8,15 +8,14 @@ const OrderDetail = ({ order, onClose }) => {
     useEffect(() => {
         const fetchArticleDetails = async () => {
             try {
-                if (!order || !order.article || !Array.isArray(order.article)) {
-                    console.error('Estructura de datos de orden incorrecta');
+                if (!order || !order.article || order.article.length === 0) {
+                    console.error('La orden no contiene artículos');
                     return;
                 }
-    
+
                 const articleIds = order.article.map(article => article.articleId);
-    
+
                 const articleDetails = await Promise.all(articleIds.map(async articleId => {
-                    console.log(articleId);
                     const response = await fetch(`${http}/articles/get/${articleId}`);
                     if (response.ok) {
                         const articleDetail = await response.json();
@@ -26,12 +25,11 @@ const OrderDetail = ({ order, onClose }) => {
                     }
                 }));
                 setArticles(articleDetails);
-                console.log(articleDetails);
             } catch (error) {
                 console.error('Error al obtener los detalles de los artículos:', error);
             }
         };
-    
+
         fetchArticleDetails();
     }, [order]);
     
