@@ -10,7 +10,7 @@ const Home = () => {
   const [isSearchEmpty, setIsSearchEmpty] = useState(true);
 
   useEffect(() => {
-    fetch('https://somniapi.onrender.com/articles/home')
+    fetch(`${process.env.CONECTION}/articles/home`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Error al obtener los artículos desde somniapi.onrender.com');
@@ -19,15 +19,15 @@ const Home = () => {
       })
       .then((data) => setArticles(data))
       .catch((error) => console.error('Error al obtener los artículos desde somniapi.onrender.com:', error));
-  }, []);  
-
+  }, []);
+  
   const handleSearch = (searchTerm) => {
     setIsSearchEmpty(searchTerm === '');
   
     if (searchTerm === '') {
       setSearchResults([]);
     } else {
-      fetch(`https://somniapi.onrender.com/articles/search/${searchTerm}`)
+      fetch(`${process.env.CONECTION}/articles/search/${searchTerm}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Error al realizar la búsqueda en somniapi.onrender.com');
@@ -42,7 +42,7 @@ const Home = () => {
         });
     }
   };
-
+  
   return (
     <div className='home'>
       <div className="search-container">

@@ -53,7 +53,7 @@ const ShoppingCart = () => {
       }
 
       try {
-        const responseRender = await fetch('https://somniapi.onrender.com/users/me', {
+        const responseRender = await fetch(process.env.CONECTION + '/users/me', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
