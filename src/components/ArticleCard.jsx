@@ -17,6 +17,10 @@ const ArticleCard = ({ article, onBuyClick }) => {
   const handleBuyClick = async () => {
     try {
       const userId = sessionStorage.getItem('userId');
+
+      if (!userId || userId === null) {
+        return <Navigate to="/login" />;
+      }
       
       // TODO arreglar dos articulos iguales
       //const isArticleAlreadyInCart = isArticleInCart(article._id);
@@ -60,7 +64,7 @@ const ArticleCard = ({ article, onBuyClick }) => {
         console.error('Error al agregar al carrito:', data.error);
       }
     } catch (error) {
-       <Navigate to="/login" />;
+      console.error('Error en la solicitud:', error);
     }
   };  
 
