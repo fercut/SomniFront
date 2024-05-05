@@ -7,9 +7,10 @@ const OrderDetail = ({ order, onClose }) => {
     useEffect(() => {
         const fetchArticleDetails = async () => {
             try {
+                //TODO problemas con las unidades y extraccion de datos
                 const articleDetails = await Promise.all(order.article.articleId.map(async articleId => {
                     console.log(articleId)
-                    const response = await fetch(`http://localhost:3000/articles/get/${articleId}`);
+                    const response = await fetch(`https://somniapi.onrender.com/articles/get/${articleId}`);
                     if (response.ok) {
                         const articleDetail = await response.json();
                         return articleDetail;
