@@ -37,10 +37,6 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
     
       const userId = sessionStorage.getItem('userId');
 
-      if (!userId) {
-        Alert('INICIE SECION', 'Por favor inicie secion antes de comprar');
-      }
-
       if (!id) {
         console.error('El artículo no tiene un ID definido');
         return;
@@ -83,6 +79,7 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
         }, 1000);
         onBuyClick(id);
       } else {
+        Alert('INICIE SECION', 'Por favor inicie secion antes de comprar');
         console.error('Error al agregar al carrito:', data.error);
       }
     } catch (error) {

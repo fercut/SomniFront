@@ -17,10 +17,6 @@ const ArticleCard = ({ article, onBuyClick }) => {
   const handleBuyClick = async () => {
     try {
       const userId = sessionStorage.getItem('userId');
-
-      if (!userId) {
-        Alert('INICIE SECION', 'Por favor inicie secion antes de comprar');
-      }
       
       // TODO arreglar dos articulos iguales
       //const isArticleAlreadyInCart = isArticleInCart(article._id);
@@ -61,6 +57,7 @@ const ArticleCard = ({ article, onBuyClick }) => {
         setIsModalOpen(false);
         onBuyClick(article._id);
       } else {
+        Alert('INICIE SECION', 'Por favor inicie secion antes de comprar');
         console.error('Error al agregar al carrito:', data.error);
       }
     } catch (error) {
