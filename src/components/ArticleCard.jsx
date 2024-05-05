@@ -57,8 +57,8 @@ const ArticleCard = ({ article, onBuyClick }) => {
         onBuyClick(article._id);
       } else {
         setAlert({
-          title: 'INICIE SESION',
-          content: 'Por favor inicie sesion antes de seguir comprando',
+          title: 'INICIE SESIÓN',
+          content: 'Por favor inicie sesión antes de seguir comprando',
           showAlert: true,
         });
         console.error('Error al agregar al carrito:', data.error);

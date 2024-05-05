@@ -8,9 +8,15 @@ const OrderDetail = ({ order, onClose }) => {
     useEffect(() => {
         const fetchArticleDetails = async () => {
             try {
-                //TODO problemas con las unidades y extraccion de datos
-                const articleDetails = await Promise.all(order.article.articleId.map(async articleId => {
-                    console.log(articleId)
+                if (!order || !order.article || !Array.isArray(order.article)) {
+                    console.error('Estructura de datos de orden incorrecta');
+                    return;
+                }
+    
+                const articleIds = order.article.map(article => article.articleId);
+    
+                const articleDetails = await Promise.all(articleIds.map(async articleId => {
+                    console.log(articleId);
                     const response = await fetch(`${http}/articles/get/${articleId}`);
                     if (response.ok) {
                         const articleDetail = await response.json();
@@ -25,9 +31,10 @@ const OrderDetail = ({ order, onClose }) => {
                 console.error('Error al obtener los detalles de los artículos:', error);
             }
         };
-
+    
         fetchArticleDetails();
     }, [order]);
+    
 
     return (
         <div className="modal">
