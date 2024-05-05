@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Alert from '../components/Alert';
 import '../style/form.css';
+import { http } from '../config';
 
 const Signin = ({ onRegistro }) => {
   const {
@@ -17,7 +18,7 @@ const Signin = ({ onRegistro }) => {
 
   const onSubmit = async (data) => {
     try {
-      const responseRender = await fetch(`${process.env.CONECTION}/users`, {
+      const responseRender = await fetch(`${http}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

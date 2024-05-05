@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Alert from './Alert';
 import '../style/ImageArticle.css';
+import { http } from '../config';
 
 const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, price, id, onClose }) => {
   const handleKeyDown = (event) => {
@@ -49,7 +50,7 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
         return;
       }
 
-      const response = await fetch(`${process.env.CONECTION}/users/${userId}`, {
+      const response = await fetch(`${http}/users/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

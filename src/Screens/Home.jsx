@@ -3,6 +3,7 @@ import ArticlesList from '../components/ArticleList.jsx';
 import Search from '../components/Search';
 import loadGif from '../assets/load.webp';
 import '../style/App.css';
+import { http } from '../config.jsx';
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
@@ -10,7 +11,7 @@ const Home = () => {
   const [isSearchEmpty, setIsSearchEmpty] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.CONECTION}/articles/home`)
+    fetch(`${http}/articles/home`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Error al obtener los artículos desde somniapi.onrender.com');
@@ -27,7 +28,7 @@ const Home = () => {
     if (searchTerm === '') {
       setSearchResults([]);
     } else {
-      fetch(`${process.env.CONECTION}/articles/search/${searchTerm}`)
+      fetch(`${http}/articles/search/${searchTerm}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Error al realizar la búsqueda en somniapi.onrender.com');

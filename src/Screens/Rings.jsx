@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import ArticlesList from '../components/ArticleList.jsx';
 import loadGif from '../assets/load.webp';
 import '../style/App.css';
+import { http } from '../config.jsx';
 
 const Rings = () => {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    fetch(`${process.env.CONECTION}/articles/rings`)
+    fetch(`${http}/articles/rings`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Error al obtener los artículos desde localhost:3000');

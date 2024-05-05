@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../style/User.css';
 import UpdateUser from '../components/UpdateUser';
 import OrderDetail from '../components/OrderDetail';
+import { http } from '../config';
 
 const User = () => {
     const token = sessionStorage.getItem('token');
@@ -27,7 +28,7 @@ const User = () => {
     };
     const handleSaveChanges = async (editedData) => {
         try {
-            const response = await fetch(`${process.env.CONECTION}/${userId}`, {
+            const response = await fetch(`${http}/${userId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ const User = () => {
             }
 
             try {
-                const responseRender = await fetch(`${process.env.CONECTION}/users/me`, {
+                const responseRender = await fetch(`${http}/users/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -98,7 +99,7 @@ const User = () => {
             const userId = sessionStorage.getItem('userId');
 
             try {
-                const response = await fetch(`${process.env.CONECTION}/orders/order/${userId}`, {
+                const response = await fetch(`${http}/orders/order/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',

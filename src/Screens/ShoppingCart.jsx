@@ -5,6 +5,7 @@ import Alert from '../components/Alert';
 import '../style/ShoppingCart.css';
 import tarjeta from '../../imagenes/visa.png';
 import paquete from '../../imagenes/paquete.png';
+import { http } from '../config';
 
 const ShoppingCart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -53,7 +54,7 @@ const ShoppingCart = () => {
       }
 
       try {
-        const responseRender = await fetch(`${process.env.CONECTION}/users/me`, {
+        const responseRender = await fetch(`${http}/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -90,7 +91,7 @@ const ShoppingCart = () => {
 
     const fetchArticleDetails = async (articleId) => {
       try {
-        const response = await fetch(`${process.env.CONECTION}/articles/get/${articleId}`);
+        const response = await fetch(`${http}/articles/get/${articleId}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -110,7 +111,7 @@ const ShoppingCart = () => {
 
   const handleIncrease = async (itemId) => {
     try {
-      const response = await fetch(`${process.env.CONECTION}/users/${userId}`, {
+      const response = await fetch(`${http}/users/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +142,7 @@ const ShoppingCart = () => {
 
   const handleDecrease = async (itemId) => {
     try {
-      const response = await fetch(`${process.env.CONECTION}/users/${userId}`, {
+      const response = await fetch(`${http}/users/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -170,7 +171,7 @@ const ShoppingCart = () => {
 
   const handleDelete = async (itemId) => {
     try {
-      const response = await fetch(`${process.env.CONECTION}/users/${userId}`, {
+      const response = await fetch(`${http}/users/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -211,7 +212,7 @@ const ShoppingCart = () => {
         return;
       }
 
-      const response = await fetch(`${process.env.CONECTION}/orders/`, {
+      const response = await fetch(`${http}/orders/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

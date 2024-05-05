@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ImageArticle from './ImageArticle';
 import Alert from './Alert';
 import '../style/ArticleCard.css'
+import { http } from '../config';
 
 const ArticleCard = ({ article, onBuyClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,7 +49,7 @@ const ArticleCard = ({ article, onBuyClick }) => {
         }),
       };
   
-      const response = await fetch(`${process.env.CONECTION}/users/${userId}`, requestOptions);
+      const response = await fetch(`${http}/users/${userId}`, requestOptions);
       const data = await response.json();
   
       if (response.ok) {
