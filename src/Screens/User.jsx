@@ -28,7 +28,7 @@ const User = () => {
     };
     const handleSaveChanges = async (editedData) => {
         try {
-            const response = await fetch(`${http}/${userId}`, {
+            const response = await fetch(`${http}/users/${userId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
