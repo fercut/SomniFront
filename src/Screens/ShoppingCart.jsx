@@ -48,7 +48,7 @@ const ShoppingCart = () => {
     const fetchCart = async () => {
 
       if (!token) {
-        navigate('/login');
+        navigate('/login'); 
         return;
       }
 

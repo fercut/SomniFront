@@ -59,7 +59,6 @@ const Login = ({ onLogin }) => {
   };
 
   if (loggedIn) {
-    // Redirigir a la ruta "/home" si el usuario está autenticado
     return <Navigate to="/home" />;
   }
 
