@@ -18,7 +18,7 @@ const ArticleCard = ({ article, onBuyClick }) => {
     try {
       const userId = sessionStorage.getItem('userId');
   
-      if (!userId) {
+      if (!userId || userId === undefined) {
         return <Navigate to="/login" />;
       }
       
