@@ -18,20 +18,14 @@ const ArticleCard = ({ article, onBuyClick }) => {
       const userId = sessionStorage.getItem('userId');
   
       if (!userId) {
-        console.error('UserId no encontrado en sessionStorage');
-        return;
+        return <Navigate to="/login" />;
       }
-  
-      if (!article._id) {
-        console.error('El artículo no tiene un ID definido');
-        return;
-      }
-  
-      const isArticleAlreadyInCart = isArticleInCart(article._id);
-  
-      if (isArticleAlreadyInCart) {
-        return;
-      }
+      
+      // TODO arreglar dos articulos iguales
+      //const isArticleAlreadyInCart = isArticleInCart(article._id);
+      // if (isArticleAlreadyInCart) {
+      //   return;
+      // }
   
       const requestOptions = {
         method: 'PATCH',
