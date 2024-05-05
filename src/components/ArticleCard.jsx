@@ -18,8 +18,8 @@ const ArticleCard = ({ article, onBuyClick }) => {
     try {
       const userId = sessionStorage.getItem('userId');
 
-      if (!userId || userId === null) {
-        return <Navigate to="/login" />;
+      if (!userId) {
+        Alert('INICIE SECION', 'Por favor inicie secion antes de comprar');
       }
       
       // TODO arreglar dos articulos iguales

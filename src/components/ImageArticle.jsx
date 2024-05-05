@@ -38,7 +38,7 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
       const userId = sessionStorage.getItem('userId');
 
       if (!userId) {
-        return <Navigate to="/login" />;
+        Alert('INICIE SECION', 'Por favor inicie secion antes de comprar');
       }
 
       if (!id) {
