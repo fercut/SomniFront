@@ -6,28 +6,44 @@ const OrderDetail = ({ order, onClose }) => {
 
     useEffect(() => {
         const fetchArticleDetails = async () => {
+          try {
+            //TODO problemas con las unidades y extraccion de datos
+            const articleDetails = await Promise.all(order.article.articleId.map(async articleId => {
+              console.log(articleId);
+              const responseLocal = await fetch(`http://localhost:3000/articles/get/${articleId}`);
+              if (responseLocal.ok) {
+                const localArticleDetail = await responseLocal.json();
+                return localArticleDetail;
+              } else {
+                throw new Error('Error al obtener los detalles del artículo desde localhost');
+              }
+            }));
+            setArticles(articleDetails);
+            console.log(articleDetails);
+          } catch (error) {
+            console.error('Error al obtener los detalles de los artículos desde localhost:', error);
+            // Intentar con la segunda URL si la primera solicitud falla
             try {
-                //TODO problemas con las unidades y extraccion de datos
-                const articleDetails = await Promise.all(order.article.articleId.map(async articleId => {
-                    console.log(articleId)
-                    const response = await fetch(`https://somniapi.onrender.com/articles/get/${articleId}`);
-                    if (response.ok) {
-                        const articleDetail = await response.json();
-                        return articleDetail;
-                    } else {
-                        throw new Error('Error al obtener los detalles del artículo');
-                    }
-                }));
-                setArticles(articleDetails);
-                console.log(articleDetails);
+              const articleDetailsRender = await Promise.all(order.article.articleId.map(async articleId => {
+                const responseRender = await fetch(`https://somniapi.onrender.com/articles/get/${articleId}`);
+                if (responseRender.ok) {
+                  const renderArticleDetail = await responseRender.json();
+                  return renderArticleDetail;
+                } else {
+                  throw new Error('Error al obtener los detalles del artículo desde somniapi.onrender.com');
+                }
+              }));
+              setArticles(articleDetailsRender);
+              console.log(articleDetailsRender);
             } catch (error) {
-                console.error('Error al obtener los detalles de los artículos:', error);
+              console.error('Error en la solicitud a somniapi.onrender.com:', error);
             }
+          }
         };
-
+      
         fetchArticleDetails();
-    }, [order]);
-
+      }, [order]);
+      
     return (
         <div className="modal">
             <div className="modal-content">

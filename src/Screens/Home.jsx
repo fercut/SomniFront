@@ -10,24 +10,17 @@ const Home = () => {
   const [isSearchEmpty, setIsSearchEmpty] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/articles/home')
+    fetch('https://somniapi.onrender.com/articles/home')
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Error al obtener los artículos desde localhost:3000');
+          throw new Error('Error al obtener los artículos desde somniapi.onrender.com');
         }
         return response.json();
       })
       .then((data) => setArticles(data))
-      .catch((error) => {
-        console.error('Intentando con la segunda URL');
-        // Intentar con la segunda URL si la primera solicitud falla
-        fetch('https://somniapi.onrender.com/articles/home')
-          .then((response) => response.json())
-          .then((data) => setArticles(data))
-          .catch((error) => console.error('Error al obtener los artículos desde la segunda URL'));
-      });
-  }, []);
-  
+      .catch((error) => console.error('Error al obtener los artículos desde somniapi.onrender.com:', error));
+  }, []);  
+
   const handleSearch = (searchTerm) => {
     setIsSearchEmpty(searchTerm === '');
   
