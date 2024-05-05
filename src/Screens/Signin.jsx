@@ -17,7 +17,7 @@ const Signin = ({ onRegistro }) => {
 
   const onSubmit = async (data) => {
     try {
-      const responseRender = await fetch('https://somniapi.onrender.com/users', {
+      const responseRender = await fetch(`${process.env.CONECTION}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

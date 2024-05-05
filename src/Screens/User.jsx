@@ -27,7 +27,7 @@ const User = () => {
     };
     const handleSaveChanges = async (editedData) => {
         try {
-            const response = await fetch(`https://somniapi.onrender.com/${userId}`, {
+            const response = await fetch(`${process.env.CONECTION}/${userId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const User = () => {
             }
 
             try {
-                const responseRender = await fetch('https://somniapi.onrender.com/users/me', {
+                const responseRender = await fetch(`${process.env.CONECTION}/users/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -98,7 +98,7 @@ const User = () => {
             const userId = sessionStorage.getItem('userId');
 
             try {
-                const response = await fetch(`https://somniapi.onrender.com/orders/order/${userId}`, {
+                const response = await fetch(`${process.env.CONECTION}/orders/order/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',

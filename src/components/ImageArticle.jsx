@@ -34,22 +34,22 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
     try {
     
       const userId = sessionStorage.getItem('userId');
-  
+
       if (!userId) {
         console.error('UserId no encontrado en sessionStorage');
         return;
       }
-  
+
       if (!id) {
         console.error('El artículo no tiene un ID definido');
         return;
       }
-  
+
       if (isArticleInCart(id)) {
         return;
       }
-  
-      const response = await fetch(`http://localhost:3000/users/${userId}`, {
+
+      const response = await fetch(`${process.env.CONECTION}/users/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -63,13 +63,13 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
             }
           }
         }),
-  
+
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
-  
+
         setAlert({
           title: 'Articulo añadido',
           content: 'Articulo añadido correctamente a su cesta',
@@ -86,46 +86,10 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
-      // Intentar con la segunda URL si la primera solicitud falla
-      try {
-        const userId = sessionStorage.getItem('userId');
-        const response = await fetch(`https://somniapi.onrender.com/users/${userId}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-          },
-          body: JSON.stringify({
-            $push: {
-              cart: {
-                itemId: id,
-                quantity: 1,
-              }
-            }
-          }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setAlert({
-            title: 'Articulo añadido',
-            content: 'Articulo añadido correctamente a su cesta',
-            showAlert: true,
-          });
-          setTimeout(() => {
-            setAlert({
-              showAlert: false,
-            });
-          }, 1000);
-          onBuyClick(id);
-        } else {
-          console.error('Error al agregar al carrito:', data.error);
-        }
-      } catch (error) {
-        console.error('Error en la solicitud a somniapi.onrender.com:', error);
-      }
     }
   };
-  
+
+
   return (
     <div className='modal'>
     <div className="image-article-modal">

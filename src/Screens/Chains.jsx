@@ -7,7 +7,7 @@ const Chains = () => {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/articles/chains')
+    fetch(`${process.env.CONECTION}/articles/chains`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Error al obtener los artículos desde localhost:3000');
@@ -19,11 +19,6 @@ const Chains = () => {
       })
       .catch((error) => {
         console.error(error.message); 
-        console.log('Intentando obtener los artículos desde somniapi.onrender.com');
-        fetch('https://somniapi.onrender.com/articles/chains')
-          .then((response) => response.json())
-          .then((data) => setArticles(data))
-          .catch((error) => console.error('Error al obtener los artículos desde somniapi.onrender.com:', error));
       });
   }, []);
 
