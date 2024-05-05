@@ -53,7 +53,7 @@ const ShoppingCart = () => {
       }
 
       try {
-        const responseRender = await fetch(process.env.CONECTION + '/users/me', {
+        const responseRender = await fetch(`${process.env.CONECTION}/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -90,7 +90,7 @@ const ShoppingCart = () => {
 
     const fetchArticleDetails = async (articleId) => {
       try {
-        const response = await fetch(`https://somniapi.onrender.com/articles/get/${articleId}`);
+        const response = await fetch(`${process.env.CONECTION}/articles/get/${articleId}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -110,7 +110,7 @@ const ShoppingCart = () => {
 
   const handleIncrease = async (itemId) => {
     try {
-      const response = await fetch(`https://somniapi.onrender.com/users/${userId}`, {
+      const response = await fetch(`${process.env.CONECTION}/users/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ const ShoppingCart = () => {
 
   const handleDecrease = async (itemId) => {
     try {
-      const response = await fetch(`https://somniapi.onrender.com/users/${userId}`, {
+      const response = await fetch(`${process.env.CONECTION}/users/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ const ShoppingCart = () => {
 
   const handleDelete = async (itemId) => {
     try {
-      const response = await fetch(`https://somniapi.onrender.com/users/${userId}`, {
+      const response = await fetch(`${process.env.CONECTION}/users/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -211,7 +211,7 @@ const ShoppingCart = () => {
         return;
       }
 
-      const response = await fetch('https://somniapi.onrender.com/orders/', {
+      const response = await fetch(`${process.env.CONECTION}/orders/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
