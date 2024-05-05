@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import Alert from './Alert';
 import '../style/ImageArticle.css';
 import { http } from '../config';
@@ -79,7 +78,11 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
         }, 1000);
         onBuyClick(id);
       } else {
-        Alert('INICIE SECION', 'Por favor inicie secion antes de comprar');
+        setAlert({
+          title: 'INICIE SESION',
+          content: 'Por favor inicie sesion antes de seguir comprando',
+          showAlert: true,
+        });
         console.error('Error al agregar al carrito:', data.error);
       }
     } catch (error) {

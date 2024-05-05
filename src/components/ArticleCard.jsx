@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import ImageArticle from './ImageArticle';
 import Alert from './Alert';
 import '../style/ArticleCard.css'
@@ -57,7 +56,11 @@ const ArticleCard = ({ article, onBuyClick }) => {
         setIsModalOpen(false);
         onBuyClick(article._id);
       } else {
-        Alert('INICIE SECION', 'Por favor inicie secion antes de comprar');
+        setAlert({
+          title: 'INICIE SESION',
+          content: 'Por favor inicie sesion antes de seguir comprando',
+          showAlert: true,
+        });
         console.error('Error al agregar al carrito:', data.error);
       }
     } catch (error) {
