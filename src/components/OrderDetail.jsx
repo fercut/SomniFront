@@ -9,12 +9,13 @@ const OrderDetail = ({ order, onClose }) => {
         const fetchArticleDetails = async () => {
             try {
                 if (!order || !order.article || order.article.length === 0) {
-                    console.error('La orden no contiene artículos');
+                    console.error('La orden o el campo article es nulo o está vacío');
                     return;
                 }
-
-                const articleIds = order.article.map(article => article.articleId);
-
+                
+                // Extraer los ObjectId de los artículos de la orden
+                const articleIds = order.article.map(article => article.$oid);
+    
                 const articleDetails = await Promise.all(articleIds.map(async articleId => {
                     const response = await fetch(`${http}/articles/get/${articleId}`);
                     if (response.ok) {
@@ -29,7 +30,7 @@ const OrderDetail = ({ order, onClose }) => {
                 console.error('Error al obtener los detalles de los artículos:', error);
             }
         };
-
+    
         fetchArticleDetails();
     }, [order]);
     
