@@ -6,21 +6,39 @@ import { http } from '../config.jsx';
 
 const Chokers = () => {
   const [articles, setArticles] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(8);
 
   useEffect(() => {
-    fetch(`${http}/articles/chokers`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al obtener los artículos desde localhost:3000');
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch(`${http}/articles/chokers?page=${page}&pageSize=${pageSize}`);
+        const data = await response.json();
+        if (page === 1) {
+          setArticles(data);
+        } else {
+          setArticles(prevArticles => [...prevArticles, ...data]);
         }
-        return response.json();
-      })
-      .then((data) => {
-        setArticles(data);
-      })
-      .catch((error) => {
-        console.error(error.message); 
-      });
+      } catch (error) {
+        console.error('Error fetching chokers:', error);
+      }
+    };
+    fetchArticles();
+  }, [page, pageSize]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
+      ) {
+        setPage(prevPage => prevPage + 1);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   return (

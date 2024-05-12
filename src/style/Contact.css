@@ -1,0 +1,16 @@
+.company {
+    width: 80%;
+    margin: auto;
+    text-align: justify;
+}
+
+.us figure {
+    display: grid;
+    align-items: center;
+    
+}
+
+.us figure img {
+    border-radius: 10px;
+    margin: auto;
+}

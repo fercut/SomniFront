@@ -14,19 +14,24 @@
 .card img {
     border-radius: 10px;
     margin-bottom: 10px;
+    margin-left: 7%;
+    width: 80%;
+    height: 50%;
 }
+
 .details {
     width: 100%;
     padding-left: 10%;
 }
+
 .details p {
-    font-size: 10px;
+    font-size: 12px;
     text-align: left;
 }
+
 .details p:last-of-type {
     font-size: 15px;
-  }
-
+}
 
 .button {
     background-color: white;

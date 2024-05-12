@@ -7,19 +7,42 @@ import { http } from '../config.jsx';
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(8);
   const [searchResults, setSearchResults] = useState([]);
   const [isSearchEmpty, setIsSearchEmpty] = useState(true);
 
   useEffect(() => {
-    fetch(`${http}/articles/home`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al obtener los artículos desde somniapi.onrender.com');
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch(`${http}/articles/home?page=${page}&pageSize=${pageSize}`);
+        const data = await response.json();
+        if (page === 1) {
+          setArticles(data);
+        } else {
+          setArticles(prevArticles => [...prevArticles, ...data]);
         }
-        return response.json();
-      })
-      .then((data) => setArticles(data))
-      .catch((error) => console.error('Error al obtener los artículos desde somniapi.onrender.com:', error));
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+      }
+    };
+
+    fetchArticles();
+  }, [page, pageSize]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
+      ) {
+        setPage(prevPage => prevPage + 1);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
   
   const handleSearch = (searchTerm) => {

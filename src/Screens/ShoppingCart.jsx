@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import CartCard from '../components/CartCard';
 import Alert from '../components/Alert';
 import '../style/ShoppingCart.css';
-import tarjeta from '../../imagenes/visa.png';
-import paquete from '../../imagenes/paquete.png';
+import tarjeta from '../assets/visa.png';
+import paquete from '../assets/paquete.png';
 import { http } from '../config';
 
 const ShoppingCart = () => {

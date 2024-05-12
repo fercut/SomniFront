@@ -94,8 +94,6 @@ const ArticleCard = ({ article, onBuyClick }) => {
         src={`data:image/jpeg;base64,${article.image}`}
         alt={article.type}
         className="article-image"
-        width={'80%'}
-        height={'50%'}
         id='foto'
         onClick={() => !isModalOpen && handleImageClick()}
       />
