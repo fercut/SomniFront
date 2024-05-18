@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { http } from '../config';
-
+import '../style/OrderDetail.css';
 
 const OrderDetail = ({ order, onClose }) => {
     const [articles, setArticles] = useState([]);
@@ -12,15 +12,19 @@ const OrderDetail = ({ order, onClose }) => {
                     console.error('La orden o el campo article es nulo o está vacío');
                     return;
                 }
+
+                console.log('Order:', order);
                 
-                // Extraer los ObjectId de los artículos de la orden
-                const articleIds = order.article.map(article => article.$oid);
-    
-                const articleDetails = await Promise.all(articleIds.map(async articleId => {
+                const articleDetails = await Promise.all(order.article.map(async articleItem => {
+                    console.log('Article item:', articleItem);
+                    const articleId = articleItem.articleId?.$oid || articleItem.articleId;
+                    if (!articleId) {
+                        throw new Error('articleId is undefined');
+                    }
                     const response = await fetch(`${http}/articles/get/${articleId}`);
                     if (response.ok) {
                         const articleDetail = await response.json();
-                        return articleDetail;
+                        return { ...articleDetail, quantity: articleItem.quantity };
                     } else {
                         throw new Error('Error al obtener los detalles del artículo');
                     }
@@ -30,10 +34,9 @@ const OrderDetail = ({ order, onClose }) => {
                 console.error('Error al obtener los detalles de los artículos:', error);
             }
         };
-    
+
         fetchArticleDetails();
     }, [order]);
-    
 
     return (
         <div className="modal">
@@ -44,20 +47,20 @@ const OrderDetail = ({ order, onClose }) => {
                 <div className="articles">
                     {articles.map(article => (
                         <div key={article._id} className="article-card">
-                        <div className="article-image">
-                            <img src={`data:image/jpeg;base64,${article.image}`} width={'100'} alt="Imagen del artículo" />
+                            <div className="article-image">
+                                <img src={`data:image/jpeg;base64,${article.image}`} width={'100'} alt="Imagen del artículo" />
+                            </div>
+                            <div className='article-details'>
+                                <p><b>Nombre: </b>{article.details}</p>
+                                <p><b>Unidades: </b>{article.quantity}</p>
+                                <p><b>Precio:</b> {article.price}€</p>
+                            </div>
                         </div>
-                        <div className='article-details'>
-                            <p><b>Nombre: </b>{article.details}</p>
-                            <p><b>Unidades: </b>{}</p>
-                            <p><b>Precio:</b> {article.price}€</p>
-                        </div>
-                    </div>
                     ))}
                 </div>
                 <hr />
                 <p><b>Fecha:</b> {new Date(order.date).toLocaleDateString()}</p>
-                <p><b>Número de pedido:</b> {order._id}</p>
+                <p><b>Número de pedido:</b> {order._id.$oid || order._id}</p>
                 <p><b>Precio total:</b> {order.price}€</p>
             </div>
         </div>

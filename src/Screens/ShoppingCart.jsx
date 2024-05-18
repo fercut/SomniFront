@@ -44,10 +44,8 @@ const ShoppingCart = () => {
     calculateTotalPrice();
   }, [cartItems]);
 
-
   useEffect(() => {
     const fetchCart = async () => {
-
       if (!token) {
         navigate('/login'); 
         return;
@@ -95,7 +93,7 @@ const ShoppingCart = () => {
         const data = await response.json();
 
         if (response.ok) {
-          return { type: data.type, image: data.image, details: data.details, price: data.price }; // Ajusta según la estructura de tu artículo
+          return { type: data.type, image: data.image, details: data.details, price: data.price }; 
         } else {
           console.error('Error al obtener detalles del artículo:', data.message);
           return {};
@@ -123,7 +121,6 @@ const ShoppingCart = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Actualizar el estado con los artículos del carrito después de aumentar la cantidad
         setCartItems((prevCart) =>
           prevCart.map((item) =>
             item.itemId === itemId
@@ -132,7 +129,6 @@ const ShoppingCart = () => {
           )
         );
       } else {
-        // Manejar el caso de error al aumentar la cantidad
         console.error('Error al aumentar la cantidad:', data.message);
       }
     } catch (error) {
@@ -202,7 +198,6 @@ const ShoppingCart = () => {
 
   const handleOrder = async () => {
     try {
-
       if (selectedOption === null) {
         setAlert({
           title: 'Importante',
@@ -220,7 +215,10 @@ const ShoppingCart = () => {
         },
         body: JSON.stringify({
           user: userId,
-          article: cartItems.map(item => item.itemId),
+          article: cartItems.map(item => ({
+            articleId: item.itemId,
+            quantity: item.quantity
+          })),
           price: totalPrice,
         }),
       });
@@ -256,7 +254,7 @@ const ShoppingCart = () => {
 
       console.error('Error en la solicitud:', error);
     }
-  }
+  };
 
   return (
     <div className='shopping-cart'>

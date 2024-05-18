@@ -36,9 +36,9 @@ const CartCard = ({ cartItem, onIncrease, onDecrease, onDelete }) => {
         <p><b>Precio:</b> {price}€</p>
       </div>
       <div className="cart-buttons">
-        <button onClick={handleDecreaseClick}>-</button>
+        <button onClick={handleDecreaseClick}> &#45; </button>
         <p className='quantity'>{quantity}</p>
-        <button onClick={handleIncreaseClick}>+</button>
+        <button onClick={handleIncreaseClick}> &#43; </button>
         <button onClick={handleDeleteClick}>Eliminar</button>
       </div>
     </div>

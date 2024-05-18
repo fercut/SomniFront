@@ -1,26 +1,70 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import taller from '../assets/taller.gif';
-import '../style/Contact.css'
+import Alert from '../components/Alert';
+import '../style/Contact.css';
+import { http } from '../config';
 
 const Contact = () => {
-
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [alert, setAlert] = useState({
+    title: '',
+    content: '',
+    showAlert: false,
+  });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Aquí puedes agregar la lógica para enviar el formulario
-    console.log('Formulario enviado:', { email, subject, message });
-    // Limpia los campos después de enviar el formulario
-    setEmail('');
-    setSubject('');
-    setMessage('');
-  }
+    
+    try {
+      const response = await fetch(`${http}/send-email`, { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, subject, message }),
+      });
+  
+      if (response.ok) {
+        setAlert({
+          title: 'Correo enviado',
+          content: 'Gracias por contactar con SomniJoyas, en breve le responderemos.',
+          showAlert: true,
+        });
+        console.log('Correo enviado exitosamente');
+        setEmail('');
+        setSubject('');
+        setMessage('');
+      } else {
+        setAlert({
+          title: 'Error al enviar el correo',
+          content: 'Por favor intentelo de nuevo mas tarde.',
+          showAlert: true,
+        });
+        const errorData = await response.json();
+        console.error('Error al enviar el correo:', errorData.error);
+      }
+    } catch (error) {
+      setAlert({
+        title: 'Error al enviar el correo',
+        content: 'Por favor intentelo de nuevo mas tarde.',
+        showAlert: true,
+      });
+      console.error('Error al enviar el correo:', error);
+    }
+  };
 
   return (
     <div className='company'>
       <div className='aboutUs'>
+      {alert.showAlert && (
+        <Alert
+          title={alert.title}
+          content={alert.content}
+          onClose={() => setAlert({ ...alert, showAlert: false })}
+        />
+      )}
         <h2>Sobre nosotros</h2>
         <div className='us'>
           <article>
@@ -58,41 +102,41 @@ const Contact = () => {
       <div className='contactUs'>
         <h2>Contactanos</h2>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="email">Correo electrónico:</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="subject">Asunto:</label>
-            <input
-              type="text"
-              id="subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="message">Mensaje:</label>
-            <textarea
-              id="message"
-              rows="5"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              required
-            />
+          <div className="form-columns">
+            <div className="left-column">
+              <label htmlFor="email">Correo electrónico:</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <label htmlFor="subject">Asunto:</label>
+              <input
+                type="text"
+                id="subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                required
+              />
+            </div>
+            <div className="right-column">
+              <label htmlFor="message">Mensaje:</label>
+              <textarea
+                id="message"
+                rows="4"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+              />
+            </div>
           </div>
           <button type="submit">Enviar</button>
         </form>
       </div>
     </div>
-  )
+  );
 }
 
 export default Contact;

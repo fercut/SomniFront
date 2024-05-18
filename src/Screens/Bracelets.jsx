@@ -23,7 +23,6 @@ const Bracelets = () => {
         console.error('Error fetching bracelets:', error);
       }
     };
-
     fetchArticles();
   }, [page, pageSize]);
 

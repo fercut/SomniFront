@@ -7,10 +7,35 @@
 .us figure {
     display: grid;
     align-items: center;
-    
+
 }
 
 .us figure img {
     border-radius: 10px;
     margin: auto;
+}
+
+.form-columns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-column,
+.right-column {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.right-column {
+    margin-right: 0;
+}
+
+textarea {
+    width: 100%;
+    resize: none;
+}
+
+button {
+    display: block;
+    margin-top: 20px;
 }
