@@ -7,6 +7,7 @@ const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
   const [alert, setAlert] = useState({
     title: '',
@@ -16,7 +17,6 @@ const Login = ({ onLogin }) => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      // Si la tecla presionada es "Enter", realiza el inicio de sesión
       handleLogin();
     }
   };
@@ -45,6 +45,7 @@ const Login = ({ onLogin }) => {
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userId);
         setLoggedIn(true);
+        setIsAdmin(data.isAdmin);
         onLogin(data.token);
       } else {
         setAlert({
@@ -60,7 +61,7 @@ const Login = ({ onLogin }) => {
   };
 
   if (loggedIn) {
-    return <Navigate to="/home" />;
+    return isAdmin ? <Navigate to="/root" /> : <Navigate to="/user" />;
   }
 
   return (

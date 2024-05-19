@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import Alert from '../components/Alert';
 import '../style/form.css';
 import { http } from '../config';
@@ -9,12 +10,17 @@ const Signin = ({ onRegistro }) => {
     register,
     handleSubmit,
     watch,
-    reset, // Función para resetear el formulario
+    reset,
     formState: { errors },
   } = useForm();
 
   const [registroExitoso, setRegistroExitoso] = useState(false);
-  const [message, setMessage] = useState(undefined);
+  const [alert, setAlert] = useState({
+    title: '',
+    content: '',
+    showAlert: false,
+  });
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
@@ -26,16 +32,37 @@ const Signin = ({ onRegistro }) => {
         body: JSON.stringify(data),
       });
       if (responseRender.ok) {
-        setMessage('Usuario registrado con éxito');
+        setAlert({
+          title: 'Usuario registrado',
+          content: 'Ya puede iniciar sesión',
+          showAlert: true,
+        });
         setRegistroExitoso(true);
         reset();
       } else {
-        setMessage('Error al registrar el usuario');
+        setAlert({
+          title: 'Error al registrarse',
+          content: 'Por favor intentelo de nuevo mas tarde',
+          showAlert: true,
+        });
       }
     } catch (error) {
-      setMessage('Error en la solicitud:', error);
+      setAlert({
+        title: 'Error al registrarse',
+        content: 'Por favor intentelo de nuevo mas tarde',
+        showAlert: true,
+      });
     }
   };
+
+  useEffect(() => {
+    if (registroExitoso) {
+      const timer = setTimeout(() => {
+        navigate('/login');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [registroExitoso, navigate]);
 
   return (
     <div className="container">
@@ -126,7 +153,13 @@ const Signin = ({ onRegistro }) => {
         {errors.verifyPassword && <span>{errors.verifyPassword.message}</span>}
 
         <button type="submit">Registrar</button>
-        {message && <Alert title={registroExitoso ? "Puede iniciar sesión" : "Algo a fallado"} content={message} onClose={() => setMessage(undefined)} />}
+        {alert.showAlert && (
+          <Alert
+            title={alert.title}
+            content={alert.content}
+            onClose={() => setAlert({ ...alert, showAlert: false })}
+          />
+        )}
       </form>
     </div>
   );

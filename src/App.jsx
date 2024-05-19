@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from './components/NavBar';
 import Rings from './Screens/Rings';
 import Earrings from './Screens/Earrings';
@@ -13,6 +13,7 @@ import ShoppingCart from './Screens/ShoppingCart';
 import Signin from './Screens/Signin';
 import Login from './Screens/Login';
 import User from './Screens/User';
+import Root from './Screens/Root';
 import './style/App.css';
 
 const App = () => {
@@ -21,6 +22,14 @@ const App = () => {
   };
 
   const [token, setToken] = useState(sessionStorage.getItem('token'));
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      setIsAdmin(decodedToken.isAdmin);
+    }
+  }, [token]);
 
   const isTokenExpired = (token) => {
     if (!token) {
@@ -63,9 +72,13 @@ const App = () => {
             <Route path="signin" element={<Signin />} />
             <Route
               path="login"
-              element={token && !tokenExpired ? <Navigate to="/user" /> : <Login onLogin={handleLogin} />}
+              element={token && !tokenExpired ? <Navigate to={isAdmin ? "/root" : "/user"} /> : <Login onLogin={handleLogin} />}
             />
             <Route path="user" element={<User />} />
+            <Route
+              path="root"
+              element={token && !tokenExpired && isAdmin ? <Root /> : <Navigate to="/user" />}
+            />
           </Routes>
         </div>
       </Router>
@@ -74,4 +87,3 @@ const App = () => {
 };
 
 export default App;
-

@@ -18,7 +18,7 @@ const Contact = () => {
     event.preventDefault();
     
     try {
-      const response = await fetch(`${http}/send-email`, { 
+      const response = await fetch(`${http}/send-email-company`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

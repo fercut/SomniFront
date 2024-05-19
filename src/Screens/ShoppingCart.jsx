@@ -206,6 +206,25 @@ const ShoppingCart = () => {
         });
         return;
       }
+    
+      try {
+        const mail = await fetch(`${http}/send-email-buy`, { 
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify( { email: userData.email , name: userData.name } ),
+        });
+    
+        if (mail.ok) {  
+          console.log('Correo enviado exitosamente');
+        } else {
+          const errorData = await mail.json();
+          console.error('Error al enviar el correo:', errorData.error);
+        }
+      } catch (error) {
+        console.error('Error al enviar el correo:', error);
+      }
 
       const response = await fetch(`${http}/orders/`, {
         method: 'POST',
