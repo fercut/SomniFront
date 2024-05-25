@@ -91,7 +91,7 @@ const ArticleCard = ({ article, onBuyClick }) => {
       )}
       <h3>{capitalizeFirstLetter(article.type)}</h3>
       <img
-        src={`data:image/jpeg;base64,${article.image}`}
+        src={article.image}
         alt={article.type}
         className="article-image"
         id='foto'

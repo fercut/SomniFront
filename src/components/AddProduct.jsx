@@ -1,96 +1,179 @@
 import React, { useState } from 'react';
-import '../style/form.css';
+import Alert from './Alert.jsx';
+import { http } from '../config';
+import '../style/AddProduct.css';
 
-const CrearJoyaForm = ({ onJoyaRegistro }) => {
-  const [joyaData, setJoyaData] = useState({
-    tipo: '',
-    material: '',
-    acabado: '',
-    dimensiones: '',
-    detalles: '',
-    unidades: '',
-    precio: '',
-    imagenes: []
+const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
+  const [alert, setAlert] = useState({
+    title: '',
+    content: '',
+    showAlert: false,
   });
+  const [joyaData, setJoyaData] = useState({
+    type: '',
+    material: '',
+    finish: '',
+    dimensions: '',
+    details: '',
+    units: '',
+    price: '',
+    image: '',
+    imagePath: '',
+  });
+
+  const [imageError, setImageError] = useState('');
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch(`${http}/articles/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        setAlert({
+          title: 'Articulo creado',
+          content: 'Nuevo articulo ingresado en la BBDD con exito',
+          showAlert: true,
+        });
+        setJoyaData({
+          type: '',
+          material: '',
+          finish: '',
+          dimensions: '',
+          details: '',
+          units: '',
+          price: '',
+          image: '',
+          imagePath: '',
+        });
+      } else {
+        setAlert({
+          title: 'Error',
+          content: 'No se ha podido añadir un nuevo articulo',
+          showAlert: true,
+        });
+      }
+    } catch (error) {
+      setAlert({
+        title: 'Error',
+        content: 'No se ha podido añadir un nuevo articulo',
+        showAlert: true,
+      });
+    }
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setJoyaData({ ...joyaData, [name]: value });
   };
 
-  const handleImagenesChange = (event) => {
-    const files = event.target.files;
-    const imagenesArray = [];
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    const filePath = event.target.value;
 
-    // Leer cada archivo y convertirlo a base64
-    for (let i = 0; i < files.length; i++) {
+    if (validateImagePath(filePath)) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        imagenesArray.push(e.target.result);
+        setJoyaData({
+          ...joyaData,
+          image: e.target.result,  // Guarda la imagen en base64
+          imagePath: filePath,
+        });
+        setImageError('');
       };
-      reader.readAsDataURL(files[i]);
+      reader.readAsDataURL(file);
+    } else {
+      setImageError('El archivo debe ser una imagen con extensión .jpg, .jpeg, .png o .webp.');
     }
+  };
 
-    setJoyaData({ ...joyaData, imagenes: imagenesArray });
+  const validateImagePath = (path) => {
+    const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+    return validExtensions.some(ext => path.toLowerCase().endsWith(ext));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Llamamos a la función que se pasa como prop para registrar la joya
-    onJoyaRegistro(joyaData);
-
-    // Limpiamos los campos después de registrar la joya
-    setJoyaData({
-      tipo: '',
-      material: '',
-      acabado: '',
-      dimensiones: '',
-      detalles: '',
-      unidades: '',
-      precio: '',
-      imagenes: []
-    });
+    if (imageError) {
+      alert(imageError);
+      return;
+    }
+    onSubmit(joyaData);
   };
 
   return (
-    <div className='container'>
-      <h2>Crear Nueva Joya</h2>
-      <form onSubmit={handleSubmit}>
-      <div className='field'>
-          <label htmlFor="tipo">Tipo:</label>
-          <input type="text" id="tipo" name="tipo" onChange={handleInputChange} value={joyaData.tipo} required />
-        </div>
-        <div className='field'>
-          <label htmlFor="material">Material:</label>
-          <input type="text" id="material" name="material" onChange={handleInputChange} value={joyaData.material} required />
-        </div>
-        <div className='field'>
-          <label htmlFor="acabado">Acabado:</label>
-          <input type="text" id="acabado" name="acabado" onChange={handleInputChange} value={joyaData.acabado} required />
-        </div>
-        <div className='field'>
-          <label htmlFor="dimensiones">Dimensiones:</label>
-          <input type="text" id="dimensiones" name="dimensiones" onChange={handleInputChange} value={joyaData.dimensiones} />
-        </div>
-        <div className='field'>
-          <label htmlFor="detalles">Detalles:</label>
-          <textarea id="detalles" name="detalles" onChange={handleInputChange} value={joyaData.detalles}></textarea>
-        </div>
-        <div className='field'>
-          <label htmlFor="unidades">Unidades:</label>
-          <input type="number" id="unidades" name="unidades" onChange={handleInputChange} value={joyaData.unidades} required />
-        </div>
-        <div className='field'>
-          <label htmlFor="precio">Precio:</label>
-          <input type="number" id="precio" name="precio" onChange={handleInputChange} value={joyaData.precio} required />
-        </div>
-        <div className='field'>
-          <label htmlFor="imagenes">Imágenes:</label>
-          <input type="file" id="imagenes" name="imagenes" onChange={handleImagenesChange} multiple />
-        </div>
-        <button type="submit">Registrar Joya</button>
-      </form>
+    <div className='modal'>
+      <div className='modal-content'>
+        <span className='close' onClick={onClose}>&times;</span>
+        <h2>Nueva Joya</h2>
+        <form onSubmit={handleSubmit}>
+          <div className='field'>
+            <label htmlFor="type">Tipo:</label>
+            <select id="type" name="type" onChange={handleInputChange} value={joyaData.type} required>
+              <option value="">Selecciona un tipo</option>
+              <option value="anillo">Anillo</option>
+              <option value="pendientes">Pendientes</option>
+              <option value="pulseras">Pulseras</option>
+              <option value="cadenas">Cadenas</option>
+              <option value="gargantillas">Gargantillas</option>
+              <option value="colgante">Colgante</option>
+            </select>
+          </div>
+          <div className='field'>
+            <label htmlFor="material">Material:</label>
+            <select id="material" name="material" onChange={handleInputChange} value={joyaData.material} required>
+              <option value="">Selecciona un material</option>
+              <option value="plata">Plata</option>
+              <option value="oro">Oro</option>
+              <option value="acero">Acero</option>
+            </select>
+          </div>
+          <div className='field'>
+            <label htmlFor="finish">Acabado:</label>
+            <select id="finish" name="finish" onChange={handleInputChange} value={joyaData.finish} required>
+              <option value="">Selecciona un acabado</option>
+              <option value="plateado">Plateado</option>
+              <option value="Baño de oro de 18kt.">Baño de oro de 18kt.</option>
+              <option value="Baño de Oro Rosa de 18kt.">Baño de Oro Rosa de 18kt.</option>
+              <option value="Baño de rodio">Baño de rodio</option>
+            </select>
+          </div>
+          <div className='field'>
+            <label htmlFor="dimensions">Dimensiones:</label>
+            <input type="text" id="dimensions" name="dimensions" onChange={handleInputChange} value={joyaData.dimensions} required />
+          </div>
+          <div className='field'>
+            <label htmlFor="details">Detalles:</label>
+            <input type="text" id="details" name="details" onChange={handleInputChange} value={joyaData.details} required />
+          </div>
+          <div className='field'>
+            <label htmlFor="units">Unidades:</label>
+            <input type="number" id="units" name="units" onChange={handleInputChange} value={joyaData.units} required />
+          </div>
+          <div className='field'>
+            <label htmlFor="price">Precio:</label>
+            <input type="number" id="price" name="price" onChange={handleInputChange} value={joyaData.price} required />
+          </div>
+          <div className='field'>
+            <label htmlFor="image">Imágenes:</label>
+            <input type="file" id="image" name="image" onChange={handleImageChange} />
+            <input type="text" value={joyaData.imagePath} readOnly />
+            {imageError && <p className="error">{imageError}</p>}
+          </div>
+          <button type="submit">Registrar Joya</button>
+        </form>
+      </div>
+      {alert.showAlert && (
+          <Alert
+            title={alert.title}
+            content={alert.content}
+            onClose={() => setAlert({ ...alert, showAlert: false })}
+          />
+        )}
     </div>
   );
 };

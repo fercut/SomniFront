@@ -25,7 +25,7 @@ const CartCard = ({ cartItem, onIncrease, onDecrease, onDelete }) => {
   return (
     <div className="cart-card">
       <img
-        src={`data:image/jpeg;base64,${image}`}
+        src={image}
         alt={type}
         className="cart-image"
         width={'100px'}

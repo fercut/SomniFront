@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { http } from '../config'; // Asegúrate de tener esta configuración con la URL base de tu API
 import AddProduct from '../components/AddProduct';
+import '../style/Root.css';
 
 Modal.setAppElement('#root');
 
@@ -93,8 +94,7 @@ const Root = () => {
         }
     };
 
-    const handleDelete = async () => {
-        const { id, type } = modalContent;
+    const handleDelete = async (id, type) => {
         const url = type === 'user' ? `${http}/users/${id}` : `${http}/articles/${id}`;
         try {
             const response = await fetchWithAuth(url, {
@@ -113,11 +113,11 @@ const Root = () => {
         } catch (error) {
             console.error(`Error in handleDelete ${type}:`, error);
         }
-    };
+    };    
 
     const openModal = (id, type) => {
         setModalContent({ id, type });
-        setModalAction(() => handleDelete);
+        setModalAction(() => () => handleDelete(id, type));
         setModalIsOpen(true);
     };
 
@@ -225,36 +225,46 @@ const Root = () => {
                     </tbody>
                 </table>
             </div>
-            <div className="section">
-                <h2>Artículos</h2>
-                <button onClick={() => setShowAddJewelry(true)}>Añadir Joya</button>
+            <div className="sectionArticle">
+                <header className='headerArticle'>
+                    <h2>Artículos</h2>
+                    <button onClick={() => setShowAddJewelry(true)}>Añadir Joya</button>
+                </header>
                 <table>
                     <thead>
                         <tr>
                             <th>Imagen</th>
                             <th>Tipo</th>
+                            <th>Material</th>
+                            <th>Acabado</th>
+                            <th>Dimenciones</th>
                             <th>Descripción</th>
                             <th>Stock</th>
                             <th>Precio</th>
-                            <th>Acciones</th>
+                            <th colSpan={2}>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {articles.map(article => (
                             <tr key={article._id}>
                                 <td><img
-                                    src={`data:image/jpeg;base64,${article.image}`}
+                                    src={article.image}
                                     alt={article.type}
                                     className="article-image"
                                     id='foto'
-                                    width={60}
+                                    width={75}
                                 /></td>
                                 <td>{article.type}</td>
+                                <td>{article.material}</td>
+                                <td>{article.finish}</td>
+                                <td>{article.dimensions}</td>
                                 <td>{article.details}</td>
                                 <td>{article.units}/unds</td>
                                 <td>{article.price}€</td>
                                 <td>
                                     <button>Editar</button>
+                                </td>
+                                <td>
                                     <button onClick={() => handleDeleteArticle(article._id)}>Eliminar</button>
                                 </td>
                             </tr>
