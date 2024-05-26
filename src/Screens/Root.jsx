@@ -196,13 +196,13 @@ const Root = () => {
                     <tbody>
                         {orders.map(order => (
                             <tr key={order._id}>
-                                <td>****{order._id.substring(order._id.length - 8)}</td>
-                                <td>{order.user}</td>
+                                <td>****{order._id.substring(order._id.length - 6)}</td>
+                                <td>****{order.user.substring(order.user.length - 6)}</td>
                                 <td>{order.price}€</td>
                                 <td>{new Date(order.date).toLocaleDateString()}</td>
                                 <td>
                                     {order.article.map((art, index) => (
-                                        <div key={index}>****{art.articleId.substring(art.articleId.length - 4)}</div>
+                                        <div key={index}>****{art.articleId.substring(art.articleId.length - 6)}</div>
                                     ))}
                                 </td>
                                 <td>
@@ -228,6 +228,7 @@ const Root = () => {
                     <thead>
                         <tr>
                             <th>Nombre</th>
+                            <th>ID</th>
                             <th>Email</th>
                             <th>Teléfono</th>
                             <th>Ciudad</th>
@@ -238,6 +239,7 @@ const Root = () => {
                         {users.map(user => (
                             <tr key={user._id}>
                                 <td>{user.name} {user.lastname}</td>
+                                <td>****{user._id.substring(user._id.length - 6)}</td>
                                 <td>{user.email}</td>
                                 <td>{user.phone}</td>
                                 <td>{user.city}</td>
