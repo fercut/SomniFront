@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { http } from '../config'; // Asegúrate de tener esta configuración con la URL base de tu API
+import { useNavigate } from 'react-router-dom';
+import { http } from '../config'; 
 import AddProduct from '../components/AddProduct';
+import UpdateProduct from '../components/UpdateProduct';
+import ConfirmationModal from '../components/ConfirmationModal.jsx';
 import '../style/Root.css';
 
 Modal.setAppElement('#root');
@@ -11,9 +14,12 @@ const Root = () => {
     const [users, setUsers] = useState([]);
     const [orders, setOrders] = useState([]);
     const [showAddJewelry, setShowAddJewelry] = useState(false);
+    const [showUpdateJewelry, setShowUpdateJewelry] = useState(false);
+    const [currentArticle, setCurrentArticle] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState({});
     const [modalAction, setModalAction] = useState(null);
+    const navigate = useNavigate();
 
     const fetchWithAuth = async (url, options = {}) => {
         const token = sessionStorage.getItem('token');
@@ -152,15 +158,33 @@ const Root = () => {
         }
     };
 
+    const handleEditArticle = (article) => {
+        setCurrentArticle(article);
+        setShowUpdateJewelry(true);
+    };
+
+    const handleUpdateJewelry = async (updatedJoya) => {
+        setArticles(articles.map(article => (article._id === updatedJoya._id ? updatedJoya : article)));
+        setShowUpdateJewelry(false);
+        setCurrentArticle(null);
+    };
+
+    const handleLogout = () => {
+        sessionStorage.clear();
+        navigate('/home');
+        window.location.reload();
+    };
+
     return (
         <div className="root-container">
             <h1>Panel de administrador</h1>
+            <button onClick={handleLogout}>Cerrar sesión</button>
             <div className="section">
                 <h2>Órdenes</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Numero de pedido</th>
                             <th>Usuario</th>
                             <th>Total</th>
                             <th>Fecha</th>
@@ -172,13 +196,13 @@ const Root = () => {
                     <tbody>
                         {orders.map(order => (
                             <tr key={order._id}>
-                                <td>{order._id}</td>
-                                <td>{order.userEmail}</td>
+                                <td>****{order._id.substring(order._id.length - 8)}</td>
+                                <td>{order.user}</td>
                                 <td>{order.price}€</td>
                                 <td>{new Date(order.date).toLocaleDateString()}</td>
                                 <td>
                                     {order.article.map((art, index) => (
-                                        <div key={index}>{art.articleId}</div>
+                                        <div key={index}>****{art.articleId.substring(art.articleId.length - 4)}</div>
                                     ))}
                                 </td>
                                 <td>
@@ -259,10 +283,10 @@ const Root = () => {
                                 <td>{article.finish}</td>
                                 <td>{article.dimensions}</td>
                                 <td>{article.details}</td>
-                                <td>{article.units}/unds</td>
+                                <td style={article.units <= 15 ? { color: 'red', fontWeight: 'bold' } : {}}>{article.units}/unds</td>
                                 <td>{article.price}€</td>
                                 <td>
-                                    <button>Editar</button>
+                                <button onClick={() => handleEditArticle(article)}>Editar</button>
                                 </td>
                                 <td>
                                     <button onClick={() => handleDeleteArticle(article._id)}>Eliminar</button>
@@ -273,20 +297,20 @@ const Root = () => {
                 </table>
             </div>
             {showAddJewelry && <AddProduct onAdd={handleAddJewelry} onClose={() => setShowAddJewelry(false)} />}
-            <Modal
+            {showUpdateJewelry && (
+                <UpdateProduct
+                    initialData={currentArticle}
+                    onClose={() => setShowUpdateJewelry(false)}
+                    onUpdate={handleUpdateJewelry}
+                />
+            )}
+            <ConfirmationModal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                contentLabel="Confirmación de eliminación"
-                className="modal"
-                overlayClassName="modal-overlay"
-            >
-                <h2>¿Estás seguro?</h2>
-                <p>Esta acción no se puede deshacer.</p>
-                <div className="modal-actions">
-                    <button onClick={modalAction}>Eliminar</button>
-                    <button onClick={closeModal}>Cancelar</button>
-                </div>
-            </Modal>
+                onConfirm={modalAction}
+                title="¿Estás seguro?"
+                message="Esta acción no se puede deshacer."
+            />
         </div>
     );
 };

@@ -93,7 +93,7 @@ const ShoppingCart = () => {
         const data = await response.json();
 
         if (response.ok) {
-          return { type: data.type, image: data.image, details: data.details, price: data.price }; 
+          return { type: data.type, image: data.image, details: data.details, price: data.price, units: data.units }; 
         } else {
           console.error('Error al obtener detalles del artículo:', data.message);
           return {};
@@ -246,6 +246,27 @@ const ShoppingCart = () => {
 
       if (response.ok) {
         handleDelete(cartItems.map(item => item.itemId));
+        for (const item of cartItems) {
+            try {
+              const newStock = item.units - item.quantity;
+              const response = await fetch(`${http}/articles/${item.itemId}`, {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ units: newStock }),
+              });
+      
+              const data = await response.json();
+      
+              if (!response.ok) {
+                console.error('Error al actualizar el stock del artículo:', data.message);
+              }
+            } catch (error) {
+              console.error('Error al actualizar el stock del artículo:', error);
+            }
+          } 
         setAlert({
           title: 'Pedido realizado',
           content: '¡Gracias por tu compra!',
@@ -317,7 +338,7 @@ const ShoppingCart = () => {
               value="Tarjeta"
               onChange={() => handleOptionChange('Tarjeta')}
             />
-            Tarjeta
+            <p>Tarjeta</p>
             <img src={tarjeta} width={30} alt="tarjeta" />
           </label>
 
@@ -328,7 +349,7 @@ const ShoppingCart = () => {
               value="Contrarreembolso"
               onChange={() => handleOptionChange('Contrarreembolso')}
             />
-            Contrarreembolso
+            <p>Contrarreembolso</p>
             <img src={paquete} width={30} alt="paquete" />
           </label>
           <button onClick={handleOrder}>Tramitar pedido</button>

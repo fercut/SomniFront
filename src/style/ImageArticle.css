@@ -31,8 +31,13 @@
   height: 100%;
 }
 
-.image-container img {
+.image-container>figure {
   max-width: 50%;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.image-container img {
   max-height: 80%;
   object-fit: cover;
   border-radius: 10px;

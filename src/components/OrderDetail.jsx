@@ -48,7 +48,7 @@ const OrderDetail = ({ order, onClose }) => {
                     {articles.map(article => (
                         <div key={article._id} className="article-card">
                             <div className="article-image">
-                                <img src={`data:image/jpeg;base64,${article.image}`} width={'100'} alt="Imagen del artículo" />
+                                <img src={article.image} width={'100'} alt="Imagen del artículo" />
                             </div>
                             <div className='article-details'>
                                 <p><b>Nombre: </b>{article.details}</p>

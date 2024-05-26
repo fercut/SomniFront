@@ -74,7 +74,7 @@ const App = () => {
               path="login"
               element={token && !tokenExpired ? <Navigate to={isAdmin ? "/root" : "/user"} /> : <Login onLogin={handleLogin} />}
             />
-            <Route path="user" element={<User />} />
+            <Route path="user" element={token && !tokenExpired ? (isAdmin ? <Navigate to="/root" /> : <User />) : <Navigate to="/login" />} />
             <Route
               path="root"
               element={token && !tokenExpired && isAdmin ? <Root /> : <Navigate to="/user" />}

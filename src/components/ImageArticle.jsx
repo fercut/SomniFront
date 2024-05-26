@@ -33,7 +33,7 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
 
   const handleBuyClick = async () => {
     try {
-    
+
       const userId = sessionStorage.getItem('userId');
 
       if (!id) {
@@ -93,28 +93,30 @@ const ImageArticle = ({ type, imageUrl, material, finish, dimensions, details, p
 
   return (
     <div className='modal'>
-    <div className="image-article-modal">
-      {alert.showAlert && (
-        <Alert
-          title={alert.title}
-          content={alert.content}
-          onClose={() => setAlert({ ...alert, showAlert: false })}
-        />
-      )}
-      <div className="image-container">
-        <img src={imageUrl} alt="Article"/>
-        <div className='content'>
-          <h1>{capitalizeFirstLetter(type)}</h1>
-          <p><b>Material:</b> {capitalizeFirstLetter(material)}</p>
-          <p><b>Acabado:</b> {capitalizeFirstLetter(finish)}</p>
-          <p><b>Dimensiones:</b> {capitalizeFirstLetter(dimensions)}</p>
-          <p><b>Detalles:</b> {capitalizeFirstLetter(details)}</p>
-          <p><b>Precio:</b> {price}€</p>
-          <button className='shop-button' onClick={handleBuyClick} >Comprar</button>
+      <div className="image-article-modal">
+        {alert.showAlert && (
+          <Alert
+            title={alert.title}
+            content={alert.content}
+            onClose={() => setAlert({ ...alert, showAlert: false })}
+          />
+        )}
+        <div className="image-container">
+          <figure>
+          <img src={imageUrl} alt="Article" onError={(e) => console.error('Error loading image:', e)} />
+          </figure>
+          <div className='content'>
+            <h1>{capitalizeFirstLetter(type)}</h1>
+            <p><b>Material:</b> {capitalizeFirstLetter(material)}</p>
+            <p><b>Acabado:</b> {capitalizeFirstLetter(finish)}</p>
+            <p><b>Dimensiones:</b> {capitalizeFirstLetter(dimensions)}</p>
+            <p><b>Detalles:</b> {capitalizeFirstLetter(details)}</p>
+            <p><b>Precio:</b> {price}€</p>
+            <button className='shop-button' onClick={handleBuyClick} >Comprar</button>
+          </div>
+          <button className="close-button" onClick={onClose}>&times;</button>
         </div>
-        <button className="close-button" onClick={onClose}>&times;</button>
       </div>
-    </div>
     </div>
   );
 };

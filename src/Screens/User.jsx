@@ -8,6 +8,7 @@ import { http } from '../config';
 const User = () => {
     const token = sessionStorage.getItem('token');
     const userId = sessionStorage.getItem('userId');
+    const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showOrderDetail, setShowOrderDetail] = useState(false);
@@ -122,8 +123,6 @@ const User = () => {
         fetchUserData();
         fetchOrderHistory();
     }, []);
-
-    const navigate = useNavigate();
 
     const handleLogout = () => {
         sessionStorage.clear();

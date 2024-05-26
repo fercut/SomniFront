@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Alert from './Alert.jsx';
-import { http } from '../config';
+import { http } from '../config.jsx';
 import '../style/AddProduct.css';
 
-const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
+const UpdateProduct = ({ initialData, onClose }) => {
   const [alert, setAlert] = useState({
     title: '',
     content: '',
     showAlert: false,
   });
+  const navigate = useNavigate();
+
   const [joyaData, setJoyaData] = useState({
     type: '',
     material: '',
@@ -23,10 +26,16 @@ const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
 
   const [imageError, setImageError] = useState('');
 
+  useEffect(() => {
+    if (initialData) {
+      setJoyaData(initialData);
+    }
+  }, [initialData]);
+
   const onSubmit = async (data) => {
     try {
-      const response = await fetch(`${http}/articles/`, {
-        method: 'POST',
+      const response = await fetch(`${http}/articles/${data._id}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -34,32 +43,27 @@ const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
       });
       if (response.ok) {
         setAlert({
-          title: 'Articulo creado',
-          content: 'Nuevo articulo ingresado en la BBDD con exito',
+          title: 'Articulo actualizado',
+          content: 'Articulo actualizado con éxito',
           showAlert: true,
         });
-        setJoyaData({
-          type: '',
-          material: '',
-          finish: '',
-          dimensions: '',
-          details: '',
-          units: '',
-          price: '',
-          image: '',
-          imagePath: '',
-        });
+        setTimeout(() => {
+          setAlert({
+            showAlert: false,
+          });
+          window.location.reload();
+        }, 2000);
       } else {
         setAlert({
           title: 'Error',
-          content: 'No se ha podido añadir un nuevo articulo',
+          content: 'No se ha podido actualizar el artículo',
           showAlert: true,
         });
       }
     } catch (error) {
       setAlert({
         title: 'Error',
-        content: 'No se ha podido añadir un nuevo articulo',
+        content: 'No se ha podido actualizar el artículo',
         showAlert: true,
       });
     }
@@ -79,7 +83,7 @@ const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
       reader.onload = (e) => {
         setJoyaData({
           ...joyaData,
-          image: e.target.result,  // Guarda la imagen en base64
+          image: e.target.result,
           imagePath: filePath,
         });
         setImageError('');
@@ -109,7 +113,7 @@ const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
     <div className='addProduct'>
       <div className='modal-content'>
         <span className='close' onClick={onClose}>&times;</span>
-        <h2>Nueva Joya</h2>
+        <h2>Actualizar artículo</h2>
         <form onSubmit={handleSubmit}>
           <div className='field'>
             <label htmlFor="type">Tipo:</label>
@@ -117,9 +121,9 @@ const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
               <option value="">Selecciona un tipo</option>
               <option value="anillo">Anillo</option>
               <option value="pendientes">Pendientes</option>
-              <option value="pulsera">Pulseras</option>
-              <option value="cadena">Cadenas</option>
-              <option value="gargantilla">Gargantillas</option>
+              <option value="pulsera">Pulsera</option>
+              <option value="cadena">Cadena</option>
+              <option value="gargantilla">Gargantilla</option>
               <option value="colgante">Colgante</option>
             </select>
           </div>
@@ -164,18 +168,18 @@ const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
             <input type="text" value={joyaData.imagePath} readOnly />
             {imageError && <p className="error">{imageError}</p>}
           </div>
-          <button type="submit">Registrar Joya</button>
+          <button type="submit">Actualizar Joya</button>
         </form>
       </div>
       {alert.showAlert && (
-          <Alert
-            title={alert.title}
-            content={alert.content}
-            onClose={() => setAlert({ ...alert, showAlert: false })}
-          />
-        )}
+        <Alert
+          title={alert.title}
+          content={alert.content}
+          onClose={() => setAlert({ ...alert, showAlert: false })}
+        />
+      )}
     </div>
   );
 };
 
-export default CrearJoyaForm;
+export default UpdateProduct;

@@ -109,7 +109,7 @@ const ArticleCard = ({ article, onBuyClick }) => {
       </div>
       {isModalOpen && (<ImageArticle
         type={article.type}
-        imageUrl={`data:image/jpeg;base64,${article.image}`}
+        imageUrl={article.image}
         material={article.material}
         finish={article.finish}
         dimensions={article.dimensions}
