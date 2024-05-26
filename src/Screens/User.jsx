@@ -100,7 +100,7 @@ const User = () => {
             const userId = sessionStorage.getItem('userId');
 
             try {
-                const response = await fetch(`${http}/orders/order/${userId}`, {
+                const response = await fetch(`${http}/orders/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
