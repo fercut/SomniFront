@@ -5,6 +5,7 @@ import { http } from '../config.jsx';
 import '../style/AddProduct.css';
 
 const UpdateProduct = ({ initialData, onClose }) => {
+  const token = sessionStorage.getItem('token');
   const [alert, setAlert] = useState({
     title: '',
     content: '',
@@ -37,6 +38,7 @@ const UpdateProduct = ({ initialData, onClose }) => {
       const response = await fetch(`${http}/articles/${data._id}`, {
         method: 'PATCH',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),

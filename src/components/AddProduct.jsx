@@ -4,6 +4,7 @@ import { http } from '../config';
 import '../style/AddProduct.css';
 
 const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
+  const token = sessionStorage.getItem('token');
   const [alert, setAlert] = useState({
     title: '',
     content: '',
@@ -28,6 +29,7 @@ const CrearJoyaForm = ({ onJoyaRegistro, onClose }) => {
       const response = await fetch(`${http}/articles/`, {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
