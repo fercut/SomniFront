@@ -132,6 +132,7 @@ const User = () => {
                     <p><b>Ciudad:</b> {userData.city}</p>
                     <p><b>Codigo postal:</b> {userData.postalCode}</p>
                     <button id='Modificar' onClick={handleEditClick}>Modificar</button>
+                    <button onClick={handleLogout}>Cerrar sesión</button>
                     {showEditModal && (
                         <UpdateUser
                             userData={userData}
@@ -161,7 +162,6 @@ const User = () => {
                     )}
                 </div>
             </div>
-            <button onClick={handleLogout}>Cerrar sesión</button>
             {showOrderDetail && (
                 <OrderDetail order={selectedOrder} onClose={handleCloseOrderDetail} />
             )}
