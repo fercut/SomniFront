@@ -24,9 +24,12 @@ const User = () => {
         postalCode: '',
         quantity: '',
     });
+    const [error, setError] = useState(null);
+    
     const handleEditClick = () => {
         setShowEditModal(true);
     };
+
     const handleSaveChanges = async (editedData) => {
         try {
             const response = await fetch(`${http}/users/${userId}`, {
@@ -39,15 +42,20 @@ const User = () => {
             });
 
             if (response.ok) {
-                onSave(editedData);
-                onClose();
+                const data = await response.json();
+                setUserData(data);
+                setShowEditModal(false);
             } else {
-                console.error('Error al actualizar los datos del usuario:', response.statusText);
+                const errorData = await response.json();
+                console.error('Error al actualizar los datos del usuario:', errorData.message);
+                setError(errorData.message);
             }
         } catch (error) {
             console.error('Error en la solicitud:', error);
+            setError(error.message);
         }
     };
+
     const handleCloseModal = () => {
         setShowEditModal(false);
     };
@@ -63,20 +71,19 @@ const User = () => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-
             if (!userId || !token) {
                 return;
             }
 
             try {
-                const responseRender = await fetch(`${http}/users/me`, {
+                const response = await fetch(`${http}/users/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
 
-                if (responseRender.ok) {
-                    const data = await responseRender.json();
+                if (response.ok) {
+                    const data = await response.json();
                     setUserData({
                         name: data.name,
                         lastname: data.lastname,
@@ -89,40 +96,42 @@ const User = () => {
                         quantity: data.cart.quantity,
                     });
                 } else {
-                    console.error('Error al obtener los datos del usuario:', data.message);
+                    const errorData = await response.json();
+                    console.error('Error al obtener los datos del usuario:', errorData.message);
+                    setError(errorData.message);
                 }
             } catch (error) {
                 console.error('Error en la solicitud:', error);
+                setError(error.message);
             }
         };
 
         const fetchOrderHistory = async () => {
-            const userId = sessionStorage.getItem('userId');
-
             try {
-                const response = await fetch(`${http}/orders/${userId}`, {
+                const response = await fetch(`${http}/orders/order/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 });
 
-                const data = await response.json();
-                console.log(data);
-
                 if (response.ok) {
+                    const data = await response.json();
                     setOrders(data.orders);
                 } else {
-                    console.error('Error al obtener el historial de pedidos:', data.message);
+                    const errorData = await response.json();
+                    console.error('Error al obtener el historial de pedidos:', errorData.message);
+                    setError(errorData.message);
                 }
             } catch (error) {
                 console.error('Error en la solicitud:', error);
+                setError(error.message);
             }
         };
 
         fetchUserData();
         fetchOrderHistory();
-    }, []);
+    }, [userId, token]);
 
     const handleLogout = () => {
         sessionStorage.clear();
@@ -136,6 +145,7 @@ const User = () => {
             <div className='data'>
                 <div className='usuario'>
                     <h3>Datos del Usuario</h3>
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
                     <p><b>Nombre:</b> {userData.name} {userData.lastname}</p>
                     <p><b>Email:</b> {userData.email}</p>
                     <p><b>Telefono:</b> {userData.phone}</p>
@@ -154,6 +164,7 @@ const User = () => {
                 </div>
                 <div className='pedidos'>
                     <h3>Historial de pedidos</h3>
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
                     {orders.length > 0 ? (
                         <ul>
                             {orders.map((order) => (
