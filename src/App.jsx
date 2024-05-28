@@ -17,10 +17,6 @@ import Root from './Screens/Root';
 import './style/App.css';
 
 const App = () => {
-  const handleSearch = (searchTerm) => {
-    console.log('Realizar búsqueda con término:', searchTerm);
-  };
-
   const [token, setToken] = useState(sessionStorage.getItem('token'));
   const [isAdmin, setIsAdmin] = useState(false);
 

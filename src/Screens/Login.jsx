@@ -32,7 +32,7 @@ const Login = ({ onLogin }) => {
     }
 
     try {
-      const responseRender = await fetch(`${http}/users/login`, {
+      const response = await fetch(`${http}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,10 +40,11 @@ const Login = ({ onLogin }) => {
         body: JSON.stringify({ email, password }),
       });
 
-      if (responseRender.ok) {
-        const data = await responseRender.json();
+      if (response.ok) {
+        const data = await response.json();
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userId);
+        sessionStorage.setItem('isAdmin', data.isAdmin);
         setLoggedIn(true);
         setIsAdmin(data.isAdmin);
         onLogin(data.token);
@@ -57,6 +58,11 @@ const Login = ({ onLogin }) => {
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
+      setAlert({
+        title: 'Error',
+        content: 'Error en la solicitud de inicio de sesión.',
+        showAlert: true,
+      });
     }
   };
 
