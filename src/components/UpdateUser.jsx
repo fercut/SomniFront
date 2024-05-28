@@ -1,18 +1,42 @@
 import React, { useState } from 'react';
 import '../style/UpdateUser.css';
+import { http } from '../config'; // Asegúrate de que http esté correctamente configurado
 
-const UpdateUser = ({ userData, onSave, onClose }) => {
+const UpdateUser = ({ userData, onClose, onUpdate }) => {
   const [editedData, setEditedData] = useState(userData);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setEditedData({ ...editedData, [name]: value });
   };
 
-  const handleSaveChanges = () => {
-    onSave(editedData);
-    onClose();
-    window.location.reload();
+  const handleSaveChanges = async () => {
+    try {
+      const userId = sessionStorage.getItem('userId');
+      const token = sessionStorage.getItem('token');
+      const response = await fetch(`${http}/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editedData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        onUpdate(data); // Actualiza los datos del usuario en el componente padre
+        onClose();
+      } else {
+        const errorData = await response.json();
+        console.error('Error al actualizar los datos del usuario:', errorData.message);
+        setError(errorData.message);
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      setError('Error en la solicitud: ' + error.message);
+    }
   };
 
   return (
@@ -20,6 +44,7 @@ const UpdateUser = ({ userData, onSave, onClose }) => {
       <div className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
         <h2>Modificar Datos de Usuario</h2>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <div className="input-group">
           <label htmlFor="name">Nombre:</label>
           <input type="text" id="name" name="name" value={editedData.name} onChange={handleInputChange} placeholder="Nombre" />

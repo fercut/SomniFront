@@ -25,35 +25,9 @@ const User = () => {
         quantity: '',
     });
     const [error, setError] = useState(null);
-    
+
     const handleEditClick = () => {
         setShowEditModal(true);
-    };
-
-    const handleSaveChanges = async (editedData) => {
-        try {
-            const response = await fetch(`${http}/users/${userId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-                },
-                body: JSON.stringify(editedData),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setUserData(data);
-                setShowEditModal(false);
-            } else {
-                const errorData = await response.json();
-                console.error('Error al actualizar los datos del usuario:', errorData.message);
-                setError(errorData.message);
-            }
-        } catch (error) {
-            console.error('Error en la solicitud:', error);
-            setError(error.message);
-        }
     };
 
     const handleCloseModal = () => {
@@ -139,6 +113,10 @@ const User = () => {
         window.location.reload();
     };
 
+    const handleUpdateUserData = (updatedData) => {
+        setUserData(updatedData);
+    };
+
     return (
         <div className='user'>
             <h1>Bienvenido {userData.name}</h1>
@@ -157,7 +135,7 @@ const User = () => {
                     {showEditModal && (
                         <UpdateUser
                             userData={userData}
-                            onSave={handleSaveChanges}
+                            onUpdate={handleUpdateUserData}
                             onClose={handleCloseModal}
                         />
                     )}
